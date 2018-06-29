@@ -1,4 +1,4 @@
 workflows:
-  - app_dir: ciscoai/kubeflow-workflows/test/workflows
+  - app_dir: CiscoAI/kubeflow-workflows/test/workflows
     component: workflows
     name: e2e
