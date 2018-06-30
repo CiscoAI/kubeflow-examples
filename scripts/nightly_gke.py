@@ -135,6 +135,8 @@ def clone_repo(dest,
 def create_gcloud_cluster(project, zone):
   cmd = "gcloud config set project " + project
   run(cmd.split())
+  cmd = "gcloud config set account nightlycpsg@cpsg-ai-kubeflow.iam.gserviceaccount.com"
+  run(cmd.split())
   cmd = "gcloud auth activate-service-account --key-file=" + os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
   run(cmd.split())
   cmd = "gcloud container clusters create nightly --zone "+zone+" --num-nodes=5 --machine-type n1-standard-2"

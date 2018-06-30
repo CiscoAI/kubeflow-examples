@@ -52,7 +52,7 @@
       // Source directory where all repos should be checked out
       local srcRootDir = testDir + "/src";
       // The directory containing the ciscoai/kubeflow-workflows repo
-      local srcDir = srcRootDir + "/ciscoai/kubeflow-workflows";
+      local srcDir = srcRootDir + "/CiscoAI/kubeflow-workflows";
       local testWorkerImage = "gcr.io/kubeflow-ci/test-worker";
       local nightlyImage = "gcr.io/cpsg-ai-kubeflow/nightly_worker:0.1"; 
       //local nightlyImage = "gcr.io/cpsg-ai-kubeflow/nightly_gke:3.4";
