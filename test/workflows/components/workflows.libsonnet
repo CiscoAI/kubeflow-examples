@@ -23,7 +23,8 @@
   // default parameters.
   defaultParams:: {
     project:: "cpsg-ai-kubeflow",
-    zone:: "us-west1-b",
+    //zone:: "us-west1-b",
+    zone:: "asia-south1-a",
     // Default registry to use.
     registry:: "gcr.io/" + $.defaultParams.project,
 
