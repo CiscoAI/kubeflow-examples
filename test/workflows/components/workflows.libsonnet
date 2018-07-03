@@ -248,7 +248,7 @@
             },  // checkout
             $.parts(namespace, name).e2e(prow_env, bucket).buildTemplate("run-tests", nightlyImage, [
               "python",
-	      "scripts/mnist.py",
+	      "scripts/mnist_app.py",
               "--project=" + project,
               "--zone=" + zone,
               "--repo=" + srcDir,
