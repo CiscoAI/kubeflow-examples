@@ -22,58 +22,11 @@ from mnist import MNIST # pylint: disable=no-name-in-module
 from random import randint
 
 from kubernetes import client, config
+import util
 
 MASTER_REPO_OWNER = "CiscoAI"
 MASTER_REPO_NAME = "kubeflow-workflows"
 port_forward_pid = 0
-
-def run(command,
-        cwd=None,
-        env=None,
-        polling_interval=datetime.timedelta(seconds=1)):
-  """Run a subprocess.
-
-  Any subprocess output is emitted through the logging modules.
-
-  Returns:
-    output: A string containing the output.
-  """
-  logging.info("Running: %s \ncwd=%s", " ".join(command), cwd)
-
-  if not env:
-    env = os.environ
-  else:
-    keys = sorted(env.keys())
-
-    lines = []
-    for k in keys:
-      lines.append("{0}={1}".format(k, env[k]))
-    logging.info("Running: Environment:\n%s", "\n".join(lines))
-
-  process = subprocess.Popen(
-    command, cwd=cwd, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
-  logging.info("Subprocess output:\n")
-  output = []
-  while process.poll() is None:
-    process.stdout.flush()
-    for line in iter(process.stdout.readline, ''):
-      output.append(line.strip())
-      logging.info(line.strip())
-
-    time.sleep(polling_interval.total_seconds())
-
-  process.stdout.flush()
-  for line in iter(process.stdout.readline, b''):
-    output.append(line.strip())
-    logging.info(line.strip())
-
-  if process.returncode != 0:
-    raise subprocess.CalledProcessError(
-      process.returncode, "cmd: {0} exited with code {1}".format(
-        " ".join(command), process.returncode), "\n".join(output))
-
-  return "\n".join(output)
 
 def clone_repo(dest,
                repo_owner=MASTER_REPO_OWNER,
@@ -100,11 +53,11 @@ def clone_repo(dest,
   repo = "https://github.com/{0}/{1}.git".format(repo_owner, repo_name)
   logging.info("repo %s", repo)
 
-  run(["git", "clone", repo, dest])
+  util.run(["git", "clone", repo, dest])
 
   if branches:
     for b in branches:
-      run(
+      util.run(
         [
           "git",
           "fetch",
@@ -114,7 +67,7 @@ def clone_repo(dest,
 
     if not sha:
       b = branches[-1].split(":", 1)[-1]
-      run(
+      util.run(
         [
           "git",
           "checkout",
@@ -122,56 +75,56 @@ def clone_repo(dest,
         ], cwd=dest)
 
   if sha:
-    run(["git", "checkout", sha], cwd=dest)
+    util.run(["git", "checkout", sha], cwd=dest)
 
   # Get the actual git hash.
   # This ensures even for periodic jobs which don't set the sha we know
   # the version of the code tested.
-  #sha = run(["git", "rev-parse", "HEAD"], cwd=dest)
+  #sha = util.run(["git", "rev-parse", "HEAD"], cwd=dest)
 
   return dest
 
 
-def create_gcloud_cluster(project, zone):
+'''def create_gcloud_cluster(project, zone):
   cmd = "gcloud config set project " + project
-  run(cmd.split())
+  util.run(cmd.split())
   cmd = "gcloud config set account nightlycpsg@cpsg-ai-kubeflow.iam.gserviceaccount.com"
-  run(cmd.split())
+  util.run(cmd.split())
   cmd = "gcloud auth activate-service-account --key-file=" + os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-  run(cmd.split())
+  util.run(cmd.split())
   cmd = "gcloud container clusters create nightly --zone "+zone+" --num-nodes=5 --machine-type n1-standard-2"
-  run(cmd.split())
+  util.run(cmd.split())
   cmd = "gcloud config set container/cluster nightly"
-  run(cmd.split())
+  util.run(cmd.split())
   cmd = "gcloud container clusters get-credentials nightly --zone "+zone
-  run(cmd.split())
+  util.run(cmd.split())
   time.sleep(300)
   cmd = "kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=nightlycpsg@cpsg-ai-kubeflow.iam.gserviceaccount.com"
-  run(cmd.split())
+  util.run(cmd.split())
 
 def delete_gcloud_cluster(zone):
   cmd = "gcloud container clusters delete nightly --zone "+zone+" --quiet"
-  run(cmd.split())
+  util.run(cmd.split())'''
 
 def check_data_export(project):
   cmd = "gcloud compute --project "+project+" ssh singlefs-2-vm --zone asia-southeast1-a --command"
   cmd1 = cmd.split()
   cmd1.append("ls /data/export")
-  run(cmd1)
+  util.run(cmd1)
 
 def rm_data_export(project):
   cmd = "gcloud compute --project "+project+" ssh singlefs-2-vm --zone asia-southeast1-a --command"
   cmd1 = cmd.split()
   cmd1.append("sudo rm -rf /data/export")
-  run(cmd1)
+  util.run(cmd1)
 
 def get_cluster_info():
   cmd = "kubectl cluster-info"
-  run(cmd.split())
+  util.run(cmd.split())
 
 def get_pods():
   cmd = "kubectl get pods -n kubeflow"
-  run(cmd.split())
+  util.run(cmd.split())
 
 def mnist_client():
 
@@ -365,50 +318,50 @@ if __name__ == "__main__":
   file_handler.setFormatter(formatter)
   logging.info("Logging to %s", test_log)
 
-  final_result = run(["ks", "version"])
+  final_result = util.run(["ks", "version"])
   if not final_result:
     # Exit with a non-zero exit code by to signal failure to prow.
     logging.error("One or more test steps failed exiting with non-zero exit "
                   "code.")
-  create_gcloud_cluster(args.project, args.zone)
+  util.create_gcloud_cluster(args.project, args.zone)
   get_cluster_info()
   logging.info(args)
   #repo_dir = clone_repo("nightly_repo")
   repo_dir = args.repo
   app = args.app
   os.chdir(repo_dir + "/" + app)
-  run(["ls"])
-  final_result = run(["./install.bash"])
+  util.run(["ls"])
+  final_result = util.run(["./install.bash"])
   if not final_result:
     # Exit with a non-zero exit code by to signal failure to prow.
     logging.error("One or more test steps failed exiting with non-zero exit "
                   "code.")
-    run(["./cleanup.bash"])
+    util.run(["./cleanup.bash"])
 
   time.sleep(90)
   get_pods()
-  run(["./train.bash"])
+  util.run(["./train.bash"])
   ret = check_train_job(app)
   if not ret:
-    run(["./cleanup.bash"])
+    util.run(["./cleanup.bash"])
     sys.exit(1)
   #check_data_export(args.project)
-  run(["./serve.bash"])
+  util.run(["./serve.bash"])
   time.sleep(30)
   ret = check_serve_status(args.app)
   if not ret:
-    run(["./cleanup.bash"])
+    util.run(["./cleanup.bash"])
     sys.exit(1)
   port_forward_start()
   time.sleep(5)
   mnist_client()
   time.sleep(5)
-  run(["./cleanup.bash"])
+  util.run(["./cleanup.bash"])
   time.sleep(60)
   #rm_data_export(args.project)
-  run(["rm","-rf","mnist"])
-  delete_gcloud_cluster(args.zone)
+  util.run(["rm","-rf","mnist"])
+  util.delete_gcloud_cluster(args.zone)
   #os.chdir("../../")
   #file_handler.flush()
-  #run(["gsutil","cp",test_log,"gs://cpsg-ai-kubeflow-bucket/nightly_logs/"])
+  #util.run(["gsutil","cp",test_log,"gs://cpsg-ai-kubeflow-bucket/nightly_logs/"])
   sys.exit(0)

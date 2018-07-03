@@ -201,6 +201,10 @@
                   name: "checkout",
                   template: "checkout",
                 }],
+                [{
+                  name: "create-pr-symlink",
+                  template: "create-pr-symlink",
+                }],
                 [
                   {
                     name: "run-tests",
@@ -244,12 +248,20 @@
             },  // checkout
             $.parts(namespace, name).e2e(prow_env, bucket).buildTemplate("run-tests", nightlyImage, [
               "python",
-	      "scripts/nightly_gke.py",
+	      "scripts/mnist.py",
               "--project=" + project,
               "--zone=" + zone,
               "--repo=" + srcDir,
               "--logpath=" + outputDir,
             ]),  // run tests
+            $.parts(namespace, name).e2e(prow_env, bucket).buildTemplate("create-pr-symlink", nightlyImage, [
+              "python",
+              "-m",
+              "kubeflow.testing.prow_artifacts",
+              "--artifacts_dir=" + outputDir,
+              "create_pr_symlink",
+              "--bucket=" + bucket,
+            ]), // create-pr-symlink
             $.parts(namespace, name).e2e(prow_env, bucket).buildTemplate("copy-artifacts", nightlyImage, [
               "python",
               "-m",
