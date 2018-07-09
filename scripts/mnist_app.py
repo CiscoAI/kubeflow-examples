@@ -197,7 +197,7 @@ def check_train_job(app):
     logging.info("job instances not spawned")
     return 0
 
-  time.sleep(200)
+  time.sleep(300)
 
   cnt = 0
   ret = v1.list_namespaced_pod("kubeflow",watch=False)
@@ -344,13 +344,17 @@ if __name__ == "__main__":
   ret = check_train_job(app)
   if not ret:
     util.run(["./cleanup.bash"])
+    time.sleep(60)
+    util.delete_gcloud_cluster(args.zone)
     sys.exit(1)
   #check_data_export(args.project)
   util.run(["./serve.bash"])
-  time.sleep(30)
+  time.sleep(60)
   ret = check_serve_status(args.app)
   if not ret:
     util.run(["./cleanup.bash"])
+    time.sleep(60)
+    util.delete_gcloud_cluster(args.zone)
     sys.exit(1)
   port_forward_start()
   time.sleep(5)
