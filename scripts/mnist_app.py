@@ -273,6 +273,12 @@ if __name__ == "__main__":
     help="The zone to create the GKE cluster.")
 
   parser.add_argument(
+    "--name",
+    default="mnist",
+    type=str,
+    help="The zone to create the GKE cluster.")
+
+  parser.add_argument(
     "--app",
     default="mnist",
     type=str,
@@ -323,7 +329,7 @@ if __name__ == "__main__":
     # Exit with a non-zero exit code by to signal failure to prow.
     logging.error("One or more test steps failed exiting with non-zero exit "
                   "code.")
-  util.create_gcloud_cluster(args.project, args.zone)
+  util.create_gcloud_cluster(args.project, args.zone, args.name)
   get_cluster_info()
   logging.info(args)
   #repo_dir = clone_repo("nightly_repo")
@@ -345,7 +351,7 @@ if __name__ == "__main__":
   if not ret:
     util.run(["./cleanup.bash"])
     time.sleep(60)
-    util.delete_gcloud_cluster(args.zone)
+    util.delete_gcloud_cluster(args.zone, args.name)
     sys.exit(1)
   #check_data_export(args.project)
   util.run(["./serve.bash"])
@@ -354,7 +360,7 @@ if __name__ == "__main__":
   if not ret:
     util.run(["./cleanup.bash"])
     time.sleep(60)
-    util.delete_gcloud_cluster(args.zone)
+    util.delete_gcloud_cluster(args.zone, args.name)
     sys.exit(1)
   port_forward_start()
   time.sleep(5)
@@ -364,7 +370,7 @@ if __name__ == "__main__":
   time.sleep(60)
   #rm_data_export(args.project)
   util.run(["rm","-rf","mnist"])
-  util.delete_gcloud_cluster(args.zone)
+  util.delete_gcloud_cluster(args.zone, args.name)
   #os.chdir("../../")
   #file_handler.flush()
   #util.run(["gsutil","cp",test_log,"gs://cpsg-ai-kubeflow-bucket/nightly_logs/"])
