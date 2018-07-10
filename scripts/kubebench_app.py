@@ -60,6 +60,7 @@ def check_kb_job(app):
 
   if(res["status"]["phase"] == "Succeeded"):
     logging.info("Job Completed")
+    return 1
   else:
     logging.info("Job NOT Completed")
     return 0
@@ -159,6 +160,8 @@ if __name__ == "__main__":
     logging.error("One or more test steps failed exiting with non-zero exit "
                   "code.")
     util.run(["./cleanup.bash"])
+    util.delete_gcloud_cluster(args.zone, args.name)
+    sys.exit(1)
 
   time.sleep(60)
   get_pods()
@@ -168,6 +171,8 @@ if __name__ == "__main__":
   time.sleep(240)
   ret = check_kb_job(app)
   if not ret:
+    logging.error("One or more test steps failed exiting with non-zero exit "
+                  "code.")
     util.run(["./cleanup.bash"])
     util.delete_gcloud_cluster(args.zone, args.name)
     sys.exit(1)
