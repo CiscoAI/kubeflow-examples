@@ -1,4 +1,4 @@
-local params = std.extVar("__ksonnet/params").components.workflows;
+local params = std.extVar("__ksonnet/params").components.kubebench;
 
 local k = import 'k.libsonnet';
 local workflows = import 'kubebench.libsonnet';
