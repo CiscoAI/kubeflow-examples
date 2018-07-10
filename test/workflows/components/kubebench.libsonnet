@@ -23,8 +23,8 @@
   // default parameters.
   defaultParams:: {
     project:: "cpsg-ai-kubeflow",
-    zone:: "us-west1-b",
-    //zone:: "asia-south1-a",
+    //zone:: "us-west1-b",
+    zone:: "asia-south1-a",
     // Default registry to use.
     registry:: "gcr.io/" + $.defaultParams.project,
 
@@ -69,7 +69,7 @@
         else name;
 
       // The namespace on the cluster we spin up to deploy into.
-      local deployNamespace = "kubeflow";
+      local deployNamespace = "default";
       // The directory within the kubeflow_testing submodule containing
       // py scripts to use.
       local k8sPy = srcDir;
@@ -192,19 +192,19 @@
             },
           ],  // volumes
           // onExit specifies the template that should always run when the workflow completes.          
-          //onExit: "exit-handler",
+          onExit: "exit-handler",
           templates: [
             {
               name: "e2e",
               steps: [
-                /*[{
+                [{
                   name: "checkout",
                   template: "checkout",
                 }],
                 [{
                   name: "create-pr-symlink",
                   template: "create-pr-symlink",
-                }],*/
+                }],
                 [
                   {
                     name: "run-tests",
