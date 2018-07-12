@@ -57,7 +57,7 @@ def run(command,
 def create_gcloud_cluster(project, zone, name):
   cmd = "gcloud config set project " + project
   run(cmd.split())
-  cmd = "gcloud config set account nightlycpsg@cpsg-ai-kubeflow.iam.gserviceaccount.com"
+  cmd = "gcloud config set account nightlycpsg@cpsg-ai-test.iam.gserviceaccount.com"
   run(cmd.split())
   cmd = "gcloud auth activate-service-account --key-file=" + os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
   run(cmd.split())
@@ -68,7 +68,7 @@ def create_gcloud_cluster(project, zone, name):
   cmd = "gcloud container clusters get-credentials " + name + " --zone "+zone
   run(cmd.split())
   time.sleep(300)
-  cmd = "kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=nightlycpsg@cpsg-ai-kubeflow.iam.gserviceaccount.com"
+  cmd = "kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=nightlycpsg@cpsg-ai-test.iam.gserviceaccount.com"
   run(cmd.split())
 
 def delete_gcloud_cluster(zone, name):
@@ -92,7 +92,7 @@ if __name__ == "__main__":
 
   parser.add_argument(
     "--project",
-    default="cpsg-ai-kubeflow",
+    default="cpsg-ai-test",
     type=str,
     help="The project containing the GKE cluster.")
 

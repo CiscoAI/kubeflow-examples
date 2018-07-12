@@ -22,7 +22,7 @@
 
   // default parameters.
   defaultParams:: {
-    project:: "cpsg-ai-kubeflow",
+    project:: "cpsg-ai-test",
     //zone:: "us-west1-b",
     zone:: "asia-south1-a",
     // Default registry to use.
@@ -55,8 +55,7 @@
       // The directory containing the ciscoai/kubeflow-workflows repo
       local srcDir = srcRootDir + "/CiscoAI/kubeflow-workflows";
       local testWorkerImage = "gcr.io/kubeflow-ci/test-worker";
-      local nightlyImage = "gcr.io/cpsg-ai-kubeflow/nightly_worker:0.1"; 
-      //local nightlyImage = "gcr.io/cpsg-ai-kubeflow/nightly_gke:3.4";
+      local nightlyImage = "gcr.io/cpsg-ai-test/nightly_worker:0.1";
       local golangImage = "golang:1.9.4-stretch";
       local helmImage = "volumecontroller/golang:1.9.2";
       // The name of the NFS volume claim to use for test files.
@@ -133,7 +132,7 @@
               },
               {
                 name: "GOOGLE_APPLICATION_CREDENTIALS",
-                value: "/secret/gcp-credentials/cpsg-ai-kubeflow-f4aaddfc1d5b.json",
+                value: "/secret/gcp-credentials/cpsg-ai-test-0b3d3aa7ce1c.json",
               },
               {
                 name: "GITHUB_TOKEN",

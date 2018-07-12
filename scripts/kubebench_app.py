@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
   parser.add_argument(
     "--project",
-    default="cpsg-ai-kubeflow",
+    default="cpsg-ai-test",
     type=str,
     help="The project containing the GKE cluster.")
 
@@ -181,5 +181,5 @@ if __name__ == "__main__":
   util.delete_gcloud_cluster(args.zone, args.name)
   #os.chdir("../../")
   #file_handler.flush()
-  #util.run(["gsutil","cp",test_log,"gs://cpsg-ai-kubeflow-bucket/nightly_logs/"])
+  #util.run(["gsutil","cp",test_log,"gs://cpsg-ai-test-bucket/nightly_logs/"])
   sys.exit(0)

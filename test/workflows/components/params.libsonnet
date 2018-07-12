@@ -7,7 +7,7 @@
     // Component-level parameters, defined initially from 'ks prototype use ...'
     // Each object below should correspond to a component in the components/ directory
     workflows: {
-      bucket: "cpsg-ai-kubeflow-bucket",
+      bucket: "cpsg-ai-test-bucket",
       name: "ciscoai-kubeflow-workflows-presubmit",
       namespace: "kubeflow-test-infra",
       prow_env: "JOB_NAME=ciscoai-kubeflow-workflows-presubmit,JOB_TYPE=presubmit,REPO_NAME=kubeflow-workflows,REPO_OWNER=CiscoAI",
@@ -15,7 +15,7 @@
       versionTag: null,
     },
     kubebench: {
-      bucket: "cpsg-ai-kubeflow-bucket",
+      bucket: "cpsg-ai-test-bucket",
       name: "ciscoai-kubeflow-workflows-presubmit",
       namespace: "kubeflow-test-infra",
       prow_env: "JOB_NAME=ciscoai-kubeflow-workflows-presubmit,JOB_TYPE=presubmit,REPO_NAME=kubeflow-workflows,REPO_OWNER=CiscoAI",

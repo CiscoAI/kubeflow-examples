@@ -88,7 +88,7 @@ def clone_repo(dest,
 '''def create_gcloud_cluster(project, zone):
   cmd = "gcloud config set project " + project
   util.run(cmd.split())
-  cmd = "gcloud config set account nightlycpsg@cpsg-ai-kubeflow.iam.gserviceaccount.com"
+  cmd = "gcloud config set account nightlycpsg@cpsg-ai-test.iam.gserviceaccount.com"
   util.run(cmd.split())
   cmd = "gcloud auth activate-service-account --key-file=" + os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
   util.run(cmd.split())
@@ -99,7 +99,7 @@ def clone_repo(dest,
   cmd = "gcloud container clusters get-credentials nightly --zone "+zone
   util.run(cmd.split())
   time.sleep(300)
-  cmd = "kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=nightlycpsg@cpsg-ai-kubeflow.iam.gserviceaccount.com"
+  cmd = "kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=nightlycpsg@cpsg-ai-test.iam.gserviceaccount.com"
   util.run(cmd.split())
 
 def delete_gcloud_cluster(zone):
@@ -262,7 +262,7 @@ if __name__ == "__main__":
 
   parser.add_argument(
     "--project",
-    default="cpsg-ai-kubeflow",
+    default="cpsg-ai-test",
     type=str,
     help="The project containing the GKE cluster.")
 
@@ -373,5 +373,5 @@ if __name__ == "__main__":
   util.delete_gcloud_cluster(args.zone, args.name)
   #os.chdir("../../")
   #file_handler.flush()
-  #util.run(["gsutil","cp",test_log,"gs://cpsg-ai-kubeflow-bucket/nightly_logs/"])
+  #util.run(["gsutil","cp",test_log,"gs://cpsg-ai-test-bucket/nightly_logs/"])
   sys.exit(0)
