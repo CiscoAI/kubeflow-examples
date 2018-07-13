@@ -304,7 +304,7 @@ if __name__ == "__main__":
   root_logger = logging.getLogger()
 
   timestamp = datetime.datetime.now().strftime("%y-%m-%d-%H-%M")
-  test_log = os.path.join(args.logpath, "test-"+timestamp+".log")
+  test_log = os.path.join(args.logpath, args.app+"-test-"+timestamp+".log")
   if not os.path.exists(os.path.dirname(test_log)):
     try:
       os.makedirs(os.path.dirname(test_log))
