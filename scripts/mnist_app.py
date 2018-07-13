@@ -205,16 +205,6 @@ def port_forward_start():
       port_forward_pid = int(line.split()[1])
       logging.info(port_forward_pid)
 
-def port_forward_stop():
-  #p = subprocess.Popen(['ps', '-aux'], stdout=subprocess.PIPE)
-  #out, err = p.communicate()
-  #for line in out.splitlines():
-  #  if 'port-forward' in line:
-  #    pid = int(line.split()[1])
-  print(port_forward_pid)
-  #os.kill(port_forward_pid, 9)
-
-
 if __name__ == "__main__":
   logging.basicConfig(level=logging.INFO,
                       format=('%(levelname)s|%(asctime)s'
@@ -303,16 +293,18 @@ if __name__ == "__main__":
   app = args.app
   os.chdir(repo_dir + "/" + app)
   util.run(["ls"])
-  final_result = util.run(["./install.bash"])
-  if not final_result:
+  try :
+    util.run(["./install.bash"])
+    time.sleep(90)
+    get_pods()
+    util.run(["./train.bash"])
+  except subprocess.CalledProcessError as e:
     # Exit with a non-zero exit code by to signal failure to prow.
     logging.error("One or more test steps failed exiting with non-zero exit "
                   "code.")
     util.run(["./cleanup.bash"])
-
-  time.sleep(90)
-  get_pods()
-  util.run(["./train.bash"])
+    util.delete_gcloud_cluster(args.zone, args.name)
+    sys.exit(1)
   ret = check_train_job(app)
   if not ret:
     util.run(["./cleanup.bash"])
