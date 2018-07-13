@@ -84,40 +84,6 @@ def clone_repo(dest,
 
   return dest
 
-
-'''def create_gcloud_cluster(project, zone):
-  cmd = "gcloud config set project " + project
-  util.run(cmd.split())
-  cmd = "gcloud config set account nightlycpsg@cpsg-ai-test.iam.gserviceaccount.com"
-  util.run(cmd.split())
-  cmd = "gcloud auth activate-service-account --key-file=" + os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-  util.run(cmd.split())
-  cmd = "gcloud container clusters create nightly --zone "+zone+" --num-nodes=5 --machine-type n1-standard-2"
-  util.run(cmd.split())
-  cmd = "gcloud config set container/cluster nightly"
-  util.run(cmd.split())
-  cmd = "gcloud container clusters get-credentials nightly --zone "+zone
-  util.run(cmd.split())
-  time.sleep(300)
-  cmd = "kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=nightlycpsg@cpsg-ai-test.iam.gserviceaccount.com"
-  util.run(cmd.split())
-
-def delete_gcloud_cluster(zone):
-  cmd = "gcloud container clusters delete nightly --zone "+zone+" --quiet"
-  util.run(cmd.split())'''
-
-def check_data_export(project):
-  cmd = "gcloud compute --project "+project+" ssh singlefs-2-vm --zone asia-southeast1-a --command"
-  cmd1 = cmd.split()
-  cmd1.append("ls /data/export")
-  util.run(cmd1)
-
-def rm_data_export(project):
-  cmd = "gcloud compute --project "+project+" ssh singlefs-2-vm --zone asia-southeast1-a --command"
-  cmd1 = cmd.split()
-  cmd1.append("sudo rm -rf /data/export")
-  util.run(cmd1)
-
 def get_cluster_info():
   cmd = "kubectl cluster-info"
   util.run(cmd.split())
@@ -353,7 +319,6 @@ if __name__ == "__main__":
     time.sleep(60)
     util.delete_gcloud_cluster(args.zone, args.name)
     sys.exit(1)
-  #check_data_export(args.project)
   util.run(["./serve.bash"])
   time.sleep(60)
   ret = check_serve_status(args.app)
@@ -368,10 +333,6 @@ if __name__ == "__main__":
   time.sleep(5)
   util.run(["./cleanup.bash"])
   time.sleep(60)
-  #rm_data_export(args.project)
   util.run(["rm","-rf","mnist"])
   util.delete_gcloud_cluster(args.zone, args.name)
-  #os.chdir("../../")
-  #file_handler.flush()
-  #util.run(["gsutil","cp",test_log,"gs://cpsg-ai-test-bucket/nightly_logs/"])
   sys.exit(0)
