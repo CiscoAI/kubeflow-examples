@@ -324,7 +324,5 @@ if __name__ == "__main__":
   mnist_client()
   time.sleep(5)
   util.run(["./cleanup.bash"])
-  time.sleep(60)
-  util.run(["rm","-rf","mnist"])
   util.delete_gcloud_cluster(args.zone, args.name)
   sys.exit(0)
