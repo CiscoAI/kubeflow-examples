@@ -48,7 +48,7 @@ logical GKE cluster where the `train` and `serve` stages run) connects with the
 
         $ ks version
 
-    Ksonnet version must be greater than or equal to **0.11.0**. Upgrade to the latest if it is an older version 
+    Ksonnet version must be greater than or equal to **0.11.0**. Upgrade to the latest if it is an older version
 
 If above commands succeeds, you are good to go !
 
@@ -56,10 +56,10 @@ If above commands succeeds, you are good to go !
 # Installation
 
         ./install.bash
-        
- 
+
+
         #Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
-        kubectl get pods -n kubeflow       
+        kubectl get pods -n kubeflow
 
 If there is any rate limit error from github, please follow the instructions at:
 https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
@@ -67,11 +67,11 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 
 # Setup
 
-1.  (**Optional**) If you want to use a custom image for training, create the training Image and upload to DockerHub. Else, skip this step to use the already existing image `docker.io/amsaha/tf-model`
+1.  (**Optional**) If you want to use a custom image for training, create the training Image and upload to DockerHub. Else, skip this step to use the already existing image `gcr.io/cpsg-ai-demo/tf-mnist-demo:v1`
 
-   Point `DOCKER_BASE_URL` to your DockerHub account. Point `IMAGE` to your training image. If you don't have a DockerHub account, create one.
+   Point `DOCKER_BASE_URL` to your DockerHub account. Point `IMAGE` to your training image. If you don't have a DockerHub account, create one at [https://hub.docker.com/](https://hub.docker.com/).
 
-       DOCKER_BASE_URL=docker.io/johnugeorge
+       DOCKER_BASE_URL=gcr.io/cpsg-ai-demo/tf-mnist-demo:v1
        IMAGE=${DOCKER_BASE_URL}/tfmodel
        docker build . --no-cache  -f Dockerfile -t ${IMAGE}
        docker push ${IMAGE}
@@ -83,7 +83,7 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 
        #Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
        kubectl get pods -n kubeflow
- 
+
 3. Start TF serving on the trained results
 
        ./serve.bash
