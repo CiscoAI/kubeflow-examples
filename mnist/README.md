@@ -42,12 +42,13 @@ logical GKE cluster where the `train` and `serve` stages run) connects with the
 
        $kubectl cluster-info
 
- 2. **Ksonnet**(Latest version:version: 0.11.0)
+ 2. **Ksonnet**
 
     Check ksonnet version
 
         $ ks version
 
+    Ksonnet version must be greater than or equal to **0.11.0**. Upgrade to the latest if it is an older version 
 
 If above commands succeeds, you are good to go !
 
@@ -55,14 +56,20 @@ If above commands succeeds, you are good to go !
 # Installation
 
         ./install.bash
+        
+ 
+        #Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
+        kubectl get pods -n kubeflow       
 
 If there is any rate limit error from github, please follow the instructions at:
 https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 
-# Setup
-1. Create the mnist training Image and upload to DockerHub
 
-   Point `DOCKER_BASE_URL` to your DockerHub account. If you don't have a DockerHub account, create one.
+# Setup
+
+1.  (**Optional**) If you want to use a custom image for training, create the training Image and upload to DockerHub. Else, skip this step to use the already existing image `docker.io/amsaha/tf-model`
+
+   Point `DOCKER_BASE_URL` to your DockerHub account. Point `IMAGE` to your training image. If you don't have a DockerHub account, create one.
 
        DOCKER_BASE_URL=docker.io/johnugeorge
        IMAGE=${DOCKER_BASE_URL}/tfmodel
@@ -74,6 +81,9 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 
        ./train.bash
 
+       #Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
+       kubectl get pods -n kubeflow
+ 
 3. Start TF serving on the trained results
 
        ./serve.bash
@@ -83,6 +93,8 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 The model can be tested using a local python client or via web application
 
 ## Using a local python client
+
+ This is the easiest way to test your model if your kubernetes cluster does not support external loadbalancers. It uses port forwarding to expose the serving service for the local clients.
 
  Port forward to access the serving port locally
 
@@ -109,6 +121,8 @@ The model can be tested using a local python client or via web application
 
 ## Using a web application
 
+ This is ideal if you would like to create a test web application exposed by a loadbalancer. 
+
        MNIST_SERVING_IP=`kubectl -n ${NAMESPACE} get svc/mnist --output=jsonpath={.spec.clusterIP}`
        echo "MNIST_SERVING_IP is ${MNIST_SERVING_IP}"
 
@@ -122,9 +136,35 @@ The model can be tested using a local python client or via web application
       ks generate tf-mnist-client tf-mnist-client --mnist_serving_ip=${MNIST_SERVING_IP} --image=${CLIENT_IMAGE}
 
       ks apply {KF_ENV} -c tf-mnist-client
+      
+      #Ensure that all pods are running in the namespace set in variables.bash. 
+      kubectl get pods -n ${NAMESPACE}
  
   Now get the loadbalancer IP of the tf-mnist-client service
  
       kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
 
   Open browser and see app at http://LoadBalancerIP 
+  
+  
+  # Extras
+  
+  ## Using Persistent Volumes
+       
+Currently, this example uses a [NFS server](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/install.bash#L53) that is automatically deployed in your Kubernetes cluster. If you have an external NFS server, you can provide its IP during the nfs-volume deployment. See [nfs-volume deployment](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/install.bash#L61) step.
+
+If you would like to have a different persistent volume, you can create a Kubernetes [pvc](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)  with the value set in the variables.bash file. See [`NFS_PVC_NAME`](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/variables.bash#L19) variable
+       
+
+## Retrain your model
+
+     
+If you want to change the training image, set `image` to your new training image. See the [prototype generation](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/train.bash#L21)
+ 
+        ks param set ${JOB} image ${IMAGE}
+        
+ If you would like to retrain the model(with a new image or not), you can delete the current training job and create a new one. See the [training](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/train.bash#L28) step. 
+
+         ks delete ${KF_ENV} -c ${JOB}  
+         ks apply ${KF_ENV} -c ${JOB}
+    
