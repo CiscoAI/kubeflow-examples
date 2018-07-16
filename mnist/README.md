@@ -74,7 +74,7 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
    (replace <username> and <container> with appropriate values).
 
        DOCKER_BASE_URL=docker.io/<username>
-       IMAGE=${DOCKER_BASE_URL}/<container>
+       IMAGE=${DOCKER_BASE_URL}/<image>
        docker build . --no-cache  -f Dockerfile -t ${IMAGE}
        docker push ${IMAGE}
        
