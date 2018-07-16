@@ -25,8 +25,10 @@ TF_MODEL_DIR=/mnt/model
 NFS_MODEL_PATH=/mnt/export
 TF_EXPORT_DIR=${NFS_MODEL_PATH}
 
-# Make sure you have a dockerhub account
-DOCKER_BASE_URL=docker.io/amsaha
-IMAGE=${DOCKER_BASE_URL}/tfmodel
+# If you want to use your own image,
+# make sure you have a dockerhub account and change
+# DOCKER_BASE_URL and IMAGE below.
+DOCKER_BASE_URL=gcr.io/cpsg-ai-demo
+IMAGE=${DOCKER_BASE_URL}/tf-mnist-demo:v1
 #docker build . --no-cache  -f Dockerfile -t ${IMAGE}
 #docker push ${IMAGE}
