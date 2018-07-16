@@ -72,10 +72,12 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 > **NOTE.** Images kept in gcr.io might make things faster since it keeps images within GKE, thus avoiding delays of accessing the image
 > from a remote container registry.
 
-   Point `DOCKER_BASE_URL` to your DockerHub account. Point `IMAGE` to your training image. If you don't have a DockerHub account, create one at [https://hub.docker.com/](https://hub.docker.com/).
+   Point `DOCKER_BASE_URL` to your DockerHub account. Point `IMAGE` to your training image. If you don't have a DockerHub account,
+   create one at [https://hub.docker.com/](https://hub.docker.com/), upload your image there, and do the following
+   (replace <username> and <container> with appropriate values).
 
-       DOCKER_BASE_URL=gcr.io/cpsg-ai-demo/
-       IMAGE=${DOCKER_BASE_URL}/tf-mnist-demo:v1
+       DOCKER_BASE_URL=docker.io/<username>
+       IMAGE=${DOCKER_BASE_URL}/<container>
        docker build . --no-cache  -f Dockerfile -t ${IMAGE}
        docker push ${IMAGE}
 
