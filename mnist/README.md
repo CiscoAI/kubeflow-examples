@@ -70,7 +70,7 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 1.  (**Optional**) If you want to use a custom image for training, create the training Image and upload to DockerHub. Else, skip this step to use the already existing image `gcr.io/cpsg-ai-demo/tf-mnist-demo:v1`.
 
 > **NOTE.** Images kept in gcr.io might make things faster since it keeps images within GKE, thus avoiding delays of accessing the image
-> from a remote container registry*.
+> from a remote container registry.
 
    Point `DOCKER_BASE_URL` to your DockerHub account. Point `IMAGE` to your training image. If you don't have a DockerHub account, create one at [https://hub.docker.com/](https://hub.docker.com/).
 
