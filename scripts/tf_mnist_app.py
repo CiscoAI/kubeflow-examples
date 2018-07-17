@@ -232,11 +232,11 @@ if __name__ == "__main__":
     "--name",
     default="tf-mnist",
     type=str,
-    help="The zone to create the GKE cluster.")
+    help="The name of the GKE cluster.")
 
   parser.add_argument(
     "--app",
-    default="tf-mnist",
+    default="mnist",
     type=str,
     help="The app to run <mnist>/<>")
 
@@ -259,8 +259,9 @@ if __name__ == "__main__":
   # to gubernator.
   root_logger = logging.getLogger()
 
+  app = "tf-"+args.app
   timestamp = datetime.datetime.now().strftime("%y-%m-%d-%H-%M")
-  test_log = os.path.join(args.logpath, args.app+"-test-"+timestamp+".log")
+  test_log = os.path.join(args.logpath, app+"-test-"+timestamp+".log")
   if not os.path.exists(os.path.dirname(test_log)):
     try:
       os.makedirs(os.path.dirname(test_log))
@@ -290,7 +291,6 @@ if __name__ == "__main__":
   logging.info(args)
   #repo_dir = clone_repo("nightly_repo")
   repo_dir = args.repo
-  app = args.app
   os.chdir(repo_dir + "/" + app)
   util.run(["ls"])
   try :
@@ -305,7 +305,7 @@ if __name__ == "__main__":
     util.run(["./cleanup.bash"])
     util.delete_gcloud_cluster(args.zone, args.name)
     sys.exit(1)
-  ret = check_train_job(app)
+  ret = check_train_job(args.app)
   if not ret:
     util.run(["./cleanup.bash"])
     time.sleep(60)
