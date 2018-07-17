@@ -230,13 +230,13 @@ if __name__ == "__main__":
 
   parser.add_argument(
     "--name",
-    default="mnist",
+    default="tf-mnist",
     type=str,
     help="The zone to create the GKE cluster.")
 
   parser.add_argument(
     "--app",
-    default="mnist",
+    default="tf-mnist",
     type=str,
     help="The app to run <mnist>/<>")
 
