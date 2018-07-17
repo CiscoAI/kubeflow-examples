@@ -25,6 +25,10 @@ If above commands succeeds, you are good to go !
 
         ./install.bash
 
+
+      # Ensure that all pods are running in the namespace set in variables.bash. 
+      kubectl get pods -n default
+
 If there is any rate limit error from github, please follow the instructions at:
 https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 
@@ -32,6 +36,9 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 Run the kubebench job setup script
 
        ./run_kb.bash
+    
+       # Ensure that all pods are running in the namespace set in variables.bash. 
+       kubectl get pods -n default
        
 # Cleanup
 Clean up the kubebench job, argo workflows, kubeflow 
