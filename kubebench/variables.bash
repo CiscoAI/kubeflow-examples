@@ -7,7 +7,7 @@ NAMESPACE=default
 APP_NAME=kubebench
 
 ## GITHUB version for official kubeflow components
-KUBEFLOW_GITHUB_VERSION=master
+KUBEFLOW_GITHUB_VERSION=v0.2.0-rc.0
 
 ## GITHUB version for ciscoai components
 CISCOAI_GITHUB_VERSION=master
