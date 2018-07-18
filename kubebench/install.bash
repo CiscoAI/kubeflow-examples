@@ -23,7 +23,7 @@ ks env set ${KF_ENV} --namespace ${NAMESPACE}
 ks registry add kubeflow github.com/kubeflow/kubeflow/tree/${KUBEFLOW_GITHUB_VERSION}/kubeflow
 
 ## Private registry that contains ${APP_NAME} example components
-ks registry add ciscoai github.com/CiscoAI/kubeflow-examples/tree/${CISCOAI_GITHUB_VERSION}/mnist/pkg
+ks registry add ciscoai github.com/CiscoAI/kubeflow-examples/tree/${CISCOAI_GITHUB_VERSION}/tf-mnist/pkg
 
 ks registry add kubebench github.com/kubeflow/kubebench/tree/${KB_VERSION}/kubebench
 
