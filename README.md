@@ -1,9 +1,9 @@
 # Kubeflow Workflows
 
 <img src="https://www.kubeflow.org/images/logo.svg" width="100">
-This repo contains example apps for [kubeflow]. Each app has its own README.
-
 ---
+
+This repo contains example apps for [kubeflow]. Each app has its own README.
 
 Here is the current list of apps:
 1. tf-mnist - TensorFlow implementation of MNIST.
