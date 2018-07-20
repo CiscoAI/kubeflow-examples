@@ -8,7 +8,7 @@ This repo contains example apps for [kubeflow]. Each app has its own README.
 
 Here is the current list of apps:
 1. tf-mnist - TensorFlow implementation of MNIST.
-2. Kubebench - A benchmark implementation for measuring performance. Uses
+2. kubebench - A benchmark implementation for measuring performance. Uses
    [kubebench].
 
 [kubeflow]: https://www.kubeflow.org/
