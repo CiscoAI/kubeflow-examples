@@ -126,7 +126,7 @@ def main(unused_args): # pylint: disable=unused-argument
   tf.logging.set_verbosity(tf.logging.INFO)
 
   # Download and load MNIST dataset.
-  mnist = tf.contrib.learn.datasets.DATASETS['mnist'](TF_DATA_DIR)
+  mnist = tf.estimator.datasets.DATASETS['mnist'](TF_DATA_DIR)
   train_input_fn = tf.estimator.inputs.numpy_input_fn(
       x={X_FEATURE: mnist.train.images},
       y=mnist.train.labels.astype(np.int32),
