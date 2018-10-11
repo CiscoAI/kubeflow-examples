@@ -27,7 +27,7 @@ local updatedParams = params {
   namespace: if params.namespace == "null" then env.namespace else params.namespace,
 };
 
-local tfJob = import "kubeflow/tf-job/tf-job.libsonnet";
+local tfJob = import "ciscoai/tf-mnistjob/tf-job.libsonnet";
 
 local name = import "param://name";
 local namespace = updatedParams.namespace;
@@ -64,11 +64,6 @@ local workerSpec = if numGpus > 0 then
 else
   tfJob.parts.tfJobReplica("WORKER", numWorkers, args, image, imagePullSecrets);
 
-local terminationPolicy = if numMasters == 1 then
-  tfJob.parts.tfJobTerminationPolicy("MASTER", 0)
-else
-  tfJob.parts.tfJobTerminationPolicy("WORKER", 0);
-
 local replicas = std.map(function(s)
                            s {
                              template+: {
@@ -85,7 +80,7 @@ local replicas = std.map(function(s)
                                },
                              },
                            },
-                         std.prune([tfJob.parts.tfJobReplica("MASTER", numMasters, args, image, imagePullSecrets) ,workerSpec, tfJob.parts.tfJobReplica("PS", numPs, args, image, imagePullSecrets)]));
+                         std.prune([workerSpec, tfJob.parts.tfJobReplica("PS", numPs, args, image, imagePullSecrets)]));
 
 
 local job =
@@ -94,12 +89,19 @@ local job =
   else
     if numPs < 1 then
       error "num_ps must be >= 1"
-    else
-      tfJob.parts.tfJob(name, namespace, replicas, null) + {
-        spec+: {
-          tfImage: image,
-          terminationPolicy: terminationPolicy,
+    else {
+      apiVersion: "kubeflow.org/v1alpha2",
+      kind: "TFJob",
+      metadata: {
+        name: name,
+        namespace: namespace,
+      },
+      spec: {
+        tfReplicaSpecs: {
+          Worker: replicas[0],
+          PS: replicas[1],
         },
-      };
+      },
+    };
 
 std.prune(k.core.v1.list.new([job]))
