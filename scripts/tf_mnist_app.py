@@ -157,7 +157,7 @@ def check_train_job(app):
   for i in ret.items:
     if((i.metadata.labels.get("tf_job_name") != None) & (i.metadata.labels.get("tf_job_name") == tjob)):
       cnt = cnt + 1
-  if(cnt == 2):
+  if(cnt == 3):
     logging.info("job instances spawned")
   else:
     logging.info("job instances not spawned")
@@ -169,13 +169,12 @@ def check_train_job(app):
   ret = v1.list_namespaced_pod("kubeflow",watch=False)
   for i in ret.items:
     if((i.metadata.labels.get("tf_job_name") != None) & (i.metadata.labels.get("tf_job_name") == tjob)):
-      cnt = cnt + 1
-  if(cnt == 0):
-    logging.info("job instances terminated ")
-    return 1
-  else:
-    logging.info("job instances NOT terminated ")
-    return 0
+      if((i.metadata.name == "tf-mnistjob-master-0") & (i.status.phase == "Succeeded")):
+        logging.info("Job Completed")
+        return 1
+
+  logging.info("job instances NOT terminated ")
+  return 0
 
 def check_serve_status(app):
 

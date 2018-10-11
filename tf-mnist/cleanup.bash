@@ -16,7 +16,8 @@ kubectl get pvc -n ${NAMESPACE}
 
 ks delete ${KF_ENV} -c nfs-server
 
-ks delete ${KF_ENV} -c kubeflow-core
+ks delete ${KF_ENV} -c centraldashboard 
+ks delete ${KF_ENV} -c tf-job-operator 
 kubectl get pods -n ${NAMESPACE}
 
 ks env rm ${KF_ENV}

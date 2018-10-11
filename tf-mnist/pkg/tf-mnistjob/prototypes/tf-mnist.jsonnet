@@ -64,6 +64,8 @@ local workerSpec = if numGpus > 0 then
 else
   tfJob.parts.tfJobReplica("WORKER", numWorkers, args, image, imagePullSecrets);
 
+local masterSpec = tfJob.parts.tfJobReplica("MASTER", numMasters, args, image, imagePullSecrets);
+
 local replicas = std.map(function(s)
                            s {
                              template+: {
@@ -80,7 +82,7 @@ local replicas = std.map(function(s)
                                },
                              },
                            },
-                         std.prune([workerSpec, tfJob.parts.tfJobReplica("PS", numPs, args, image, imagePullSecrets)]));
+                         std.prune([masterSpec, workerSpec, tfJob.parts.tfJobReplica("PS", numPs, args, image, imagePullSecrets)]));
 
 
 local job =
@@ -98,8 +100,9 @@ local job =
       },
       spec: {
         tfReplicaSpecs: {
-          Worker: replicas[0],
-          PS: replicas[1],
+          Master: replicas[0],
+          Worker: replicas[1],
+          Ps: replicas[2],
         },
       },
     };
