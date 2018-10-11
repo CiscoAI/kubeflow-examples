@@ -157,7 +157,7 @@ def check_train_job(app):
   for i in ret.items:
     if((i.metadata.labels.get("tf_job_name") != None) & (i.metadata.labels.get("tf_job_name") == tjob)):
       cnt = cnt + 1
-  if(cnt == 3):
+  if(cnt == 2):
     logging.info("job instances spawned")
   else:
     logging.info("job instances not spawned")
