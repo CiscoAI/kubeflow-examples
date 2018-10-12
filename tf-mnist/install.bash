@@ -29,7 +29,6 @@ ks registry add ciscoai github.com/CiscoAI/kubeflow-examples/tree/${CISCOAI_GITH
 
 ks pkg install kubeflow/core@${KUBEFLOW_GITHUB_VERSION}
 ks pkg install kubeflow/tf-serving@${KUBEFLOW_GITHUB_VERSION}
-ks pkg install kubeflow/tf-job@${KUBEFLOW_GITHUB_VERSION}
 
 ks pkg install ciscoai/nfs-server@${CISCOAI_GITHUB_VERSION}
 ks pkg install ciscoai/nfs-volume@${CISCOAI_GITHUB_VERSION}
@@ -40,10 +39,10 @@ ks pkg install ciscoai/tf-${APP_NAME}job@${CISCOAI_GITHUB_VERSION}
 # If you are doing this on GCP, you need to run the following command first:
 # kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=<your@email.com>
 
-ks generate kubeflow-core kubeflow-core
-ks param set kubeflow-core tfJobImage "gcr.io/kubeflow-images-public/tf_operator:v20180522-77375baf"
-ks param set kubeflow-core tfJobVersion v1alpha1
-ks apply ${KF_ENV} -c kubeflow-core
+ks generate centraldashboard centraldashboard
+ks apply ${KF_ENV} -c centraldashboard 
+ks generate tf-job-operator tf-job-operator
+ks apply ${KF_ENV} -c tf-job-operator 
 
 #7. Deploy NFS server in the k8s cluster **(Optional step)**
 

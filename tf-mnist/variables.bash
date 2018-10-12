@@ -7,7 +7,7 @@ NAMESPACE=kubeflow
 APP_NAME=mnist
 
 ## GITHUB version for official kubeflow components
-KUBEFLOW_GITHUB_VERSION=v0.2.0-rc.0
+KUBEFLOW_GITHUB_VERSION=v0.3.0-rc.3
 
 ## GITHUB version for ciscoai components
 CISCOAI_GITHUB_VERSION=master
