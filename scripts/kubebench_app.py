@@ -49,7 +49,7 @@ def copy_job_config():
   util.run(cmd.split())
   cmd = "kubectl -n default exec " + nfs_server_pod + " -- mkdir -p /exports/kubebench/experiments"
   util.run(cmd.split())
-  cmd = "kubectl cp ../config/tf_cnn_benchmarks/tf-cnn-dummy.yaml default/" + nfs_server_pod + ":/exports/config/tf-cnn-dummy.yaml"
+  cmd = "kubectl cp ../config/tf_cnn_benchmarks/tf-cnn-dummy.yaml default/" + nfs_server_pod + ":/exports/kubebench/config/tf-cnn-dummy.yaml"
   util.run(cmd.split())
 
 def check_kb_job(app):
