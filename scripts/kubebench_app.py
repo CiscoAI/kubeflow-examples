@@ -43,9 +43,13 @@ def copy_job_config():
     logging.info("nfs server pod NOT found")
     return 0
 
-  cmd = "kubectl -n default exec " + nfs_server_pod + " -- mkdir -p /exports/config"
+  cmd = "kubectl -n default exec " + nfs_server_pod + " -- mkdir -p /exports/kubebench/config"
   util.run(cmd.split())
-  cmd = "kubectl cp ../config/tf_cnn_benchmarks/job_config.yaml default/" + nfs_server_pod + ":/exports/config/job-config.yaml"
+  cmd = "kubectl -n default exec " + nfs_server_pod + " -- mkdir -p /exports/kubebench/data"
+  util.run(cmd.split())
+  cmd = "kubectl -n default exec " + nfs_server_pod + " -- mkdir -p /exports/kubebench/experiments"
+  util.run(cmd.split())
+  cmd = "kubectl cp ../config/tf_cnn_benchmarks/tf-cnn-dummy.yaml default/" + nfs_server_pod + ":/exports/config/tf-cnn-dummy.yaml"
   util.run(cmd.split())
 
 def check_kb_job(app):

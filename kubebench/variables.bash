@@ -7,7 +7,7 @@ NAMESPACE=default
 APP_NAME=kubebench
 
 ## GITHUB version for official kubeflow components
-KUBEFLOW_GITHUB_VERSION=v0.2.0-rc.0
+KUBEFLOW_GITHUB_VERSION=v0.3.0-rc.3
 
 ## GITHUB version for ciscoai components
 CISCOAI_GITHUB_VERSION=master
@@ -20,6 +20,10 @@ KF_ENV=nativek8s
 ## Name of the NFS Persistent Volume
 CONFIG_NAME="job-config"
 JOB_NAME="my-benchmark"
-PVC_NAME="kubebench-pvc"
-PVC_MOUNT="/kubebench"
+CONFIG_PVC_NAME="kubebench-config-pvc"
+DATA_PVC_NAME="kubebench-data-pvc"
+EXP_PVC_NAME="kubebench-exp-pvc"
+CONFIG_PVC_MOUNT="/exports/kubebench/config"
+DATA_PVC_MOUNT="/exports/kubebench/data"
+EXP_PVC_MOUNT="/exports/kubebench/experiments"
 

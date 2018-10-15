@@ -42,10 +42,10 @@ ks pkg install kubebench/kubebench-job@${KB_VERSION}
 # If you are doing this on GCP, you need to run the following command first:
 # kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=<your@email.com>
 
-ks generate kubeflow-core kubeflow-core
-ks param set kubeflow-core tfJobImage "gcr.io/kubeflow-images-public/tf_operator:v20180522-77375baf"
-ks param set kubeflow-core tfJobVersion v1alpha1
-ks apply ${KF_ENV} -c kubeflow-core
+ks generate centraldashboard centraldashboard
+ks apply ${KF_ENV} -c centraldashboard 
+ks generate tf-job-operator tf-job-operator
+ks apply ${KF_ENV} -c tf-job-operator 
 
 ks generate argo kubeflow-argo
 ks apply ${KF_ENV} -c kubeflow-argo
@@ -63,8 +63,12 @@ ks apply ${KF_ENV} -c nfs-server
 # you can skip this step and proceed to step 9.
 NFS_SERVER_IP=`kubectl -n ${NAMESPACE} get svc/nfs-server  --output=jsonpath={.spec.clusterIP}`
 echo "NFS Server IP: ${NFS_SERVER_IP}"
-ks generate nfs-volume nfs-volume  --name=${PVC_NAME}  --nfs_server_ip=${NFS_SERVER_IP}
-ks apply ${KF_ENV} -c nfs-volume
+ks generate nfs-volume nfs-config-volume  --name=${CONFIG_PVC_NAME}  --nfs_server_ip=${NFS_SERVER_IP} --mountpath=${CONFIG_PVC_MOUNT}
+ks apply ${KF_ENV} -c nfs-config-volume
+ks generate nfs-volume nfs-data-volume  --name=${DATA_PVC_NAME}  --nfs_server_ip=${NFS_SERVER_IP} --mountpath=${DATA_PVC_MOUNT}
+ks apply ${KF_ENV} -c nfs-data-volume
+ks generate nfs-volume nfs-exp-volume  --name=${EXP_PVC_NAME}  --nfs_server_ip=${NFS_SERVER_IP} --mountpath=${EXP_PVC_MOUNT}
+ks apply ${KF_ENV} -c nfs-exp-volume
 
 #### Installation is complete now ####
 

@@ -16,12 +16,8 @@ ks generate kubebench-job ${JOB_NAME} --name=${JOB_NAME}
 
 ks param set ${JOB_NAME} name ${JOB_NAME}
 ks param set ${JOB_NAME} namespace ${NAMESPACE}
-ks param set ${JOB_NAME} config_image gcr.io/xyhuang-kubeflow/kubebench-configurator:v20180522-1
-ks param set ${JOB_NAME} report_image gcr.io/xyhuang-kubeflow/kubebench-tf-cnn-csv-reporter:v20180522-1
-ks param set ${JOB_NAME} config_args -- --config-file=${PVC_MOUNT}/config/${CONFIG_NAME}.yaml
-ks param set ${JOB_NAME} report_args -- --output-file=${PVC_MOUNT}/output/results.csv
-ks param set ${JOB_NAME} pvc_name ${PVC_NAME}
-ks param set ${JOB_NAME} pvc_mount ${PVC_MOUNT}
+ks param set ${JOB_NAME} experimentConfigPvc ${CONFIG_PVC_NAME}
+ks param set ${JOB_NAME} experimentRecordPvc ${EXP_PVC_NAME}
 
 ks apply ${KF_ENV} -c ${JOB_NAME}
 
