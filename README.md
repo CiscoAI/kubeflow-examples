@@ -1,4 +1,4 @@
-# Kubeflow Workflows
+# KFLab
 
 <img src="https://www.kubeflow.org/images/logo.svg" width="100">
 
