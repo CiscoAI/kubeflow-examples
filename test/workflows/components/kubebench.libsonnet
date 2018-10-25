@@ -19,6 +19,27 @@
       )
     else [],
 
+  // Function turn comma separated list of prow environment variables into a dictionary.
+
+  listToDict:: function(v)
+    {
+      [v[0]]: v[1],
+    },
+
+
+  parseEnvToDict: function(v)
+    local pieces = std.split(v, ",");
+    if v != "" && std.length(pieces) > 0 then
+      std.foldl(
+        function(a, b) a + b,
+        std.map(
+          function(i) $.listToDict(std.split(i, "=")),
+          std.split(v, ",")
+        ),
+        {}
+      )
+    else {},
+
 
   // default parameters.
   defaultParams:: {
@@ -39,8 +60,14 @@
   // overrides is a dictionary of parameters to provide in addition to defaults.
   parts(namespace, name, overrides={}):: {
     // Workflow to run the e2e test.
-    e2e(prow_env, bucket):
+    e2e(prow_dict, prow_env, bucket):
       local params = $.defaultParams + overrides;
+      local repoName = if std.objectHas(prow_dict, "REPO_NAME") then
+          prow_dict.REPO_NAME
+        else "";
+      local repoOwner = if std.objectHas(prow_dict, "REPO_OWNER") then
+          prow_dict.REPO_OWNER
+        else "";
       // mountPath is the directory where the volume to store the test data
       // should be mounted.
       local mountPath = "/mnt" ;//+ "test-data-volume";
@@ -53,7 +80,7 @@
       // Source directory where all repos should be checked out
       local srcRootDir = testDir + "/src";
       // The directory containing the ciscoai/kubeflow-workflows repo
-      local srcDir = srcRootDir + "/CiscoAI/kubeflow-workflows";
+      local srcDir = srcRootDir + "/" + repoOwner + "/" + repoName;
       local testWorkerImage = "gcr.io/kubeflow-ci/test-worker";
       local nightlyImage = "gcr.io/cpsg-ai-test/nightly_worker:0.1";
       local golangImage = "golang:1.9.4-stretch";
@@ -258,7 +285,7 @@
                 ],
               },
             },  // checkout
-            $.parts(namespace, name).e2e(prow_env, bucket).buildTemplate("create-cluster", nightlyImage, [
+            $.parts(namespace, name).e2e(prow_dict, prow_env, bucket).buildTemplate("create-cluster", nightlyImage, [
               "python",
 	      "scripts/create_cluster.py",
               "--project=" + project,
@@ -266,7 +293,7 @@
               "--name=" + clusterName,
               "--logpath=" + outputDir,
             ]),  // create cluster 
-            $.parts(namespace, name).e2e(prow_env, bucket).buildTemplate("run-tests", nightlyImage, [
+            $.parts(namespace, name).e2e(prow_dict, prow_env, bucket).buildTemplate("run-tests", nightlyImage, [
               "python",
 	      "scripts/kubebench_app.py",
               "--project=" + project,
@@ -274,7 +301,7 @@
               "--repo=" + srcDir,
               "--logpath=" + outputDir,
             ]),  // run tests
-            $.parts(namespace, name).e2e(prow_env, bucket).buildTemplate("delete-cluster", nightlyImage, [
+            $.parts(namespace, name).e2e(prow_dict, prow_env, bucket).buildTemplate("delete-cluster", nightlyImage, [
               "python",
 	      "scripts/delete_cluster.py",
               "--project=" + project,
@@ -282,7 +309,7 @@
               "--name=" + clusterName,
               "--logpath=" + outputDir,
             ]),  // delete cluster 
-            $.parts(namespace, name).e2e(prow_env, bucket).buildTemplate("create-pr-symlink", nightlyImage, [
+            $.parts(namespace, name).e2e(prow_dict, prow_env, bucket).buildTemplate("create-pr-symlink", nightlyImage, [
               "python",
               "-m",
               "kubeflow.testing.prow_artifacts",
@@ -290,7 +317,7 @@
               "create_pr_symlink",
               "--bucket=" + bucket,
             ]), // create-pr-symlink
-            $.parts(namespace, name).e2e(prow_env, bucket).buildTemplate("copy-artifacts", nightlyImage, [
+            $.parts(namespace, name).e2e(prow_dict, prow_env, bucket).buildTemplate("copy-artifacts", nightlyImage, [
               "python",
               "-m",
               "kubeflow.testing.prow_artifacts",
