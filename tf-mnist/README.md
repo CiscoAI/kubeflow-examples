@@ -1,3 +1,13 @@
+# Table of Contents
+- [Overview of the application](#overview-of-the-application)
+    - [Overall Structure](#overall-structure)
+    - [GKE Specific Structure](#gke-specific-structure)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Setup](#setup)
+- [Model Testing](#model-testing)
+- [Extras](#extras)
+
 # Overview of the application
 This tutorial contains instructions to build an **end to end kubeflow app** on a
 Kubernetes cluster running on Google Kubernetes Engine (GKE) with minimal prerequisites.
@@ -74,14 +84,14 @@ If there is any rate limit error from github, please follow the instructions at:
    Point `DOCKER_BASE_URL` to your DockerHub account. Point `IMAGE` to your training image. If you don't have a DockerHub account,
    create one at [https://hub.docker.com/](https://hub.docker.com/), upload your image there, and do the following
    (replace <username> and <container> with appropriate values).
-   
+
        ```
        DOCKER_BASE_URL=docker.io/<username>
        IMAGE=${DOCKER_BASE_URL}/<image>
        docker build . --no-cache  -f Dockerfile -t ${IMAGE}
        docker push ${IMAGE}
        ```
-       
+
 > **NOTE.** Images kept in gcr.io might make things faster since it keeps images within GKE, thus avoiding delays of accessing the image
 > from a remote container registry.
 
@@ -106,88 +116,107 @@ The model can be tested using a local python client or via web application
 
 ## Using a local python client
 
- This is the easiest way to test your model if your kubernetes cluster does not support external loadbalancers. It uses port forwarding to expose the serving service for the local clients.
+This is the easiest way to test your model if your kubernetes cluster does not
+support external loadbalancers. It uses port forwarding to expose the serving
+service for the local clients.
 
- Port forward to access the serving port locally
+Port forward to access the serving port locally
 
-      ./portf.bash
-
-
- Run a sample client code to predict images(See mnist-client.py)
+        ./portf.bash
 
 
-       virtualenv --system-site-packages env
-       source ./env/bin/activate
-       easy_install -U pip
-       pip install --upgrade tensorflow
-       pip install tensorflow-serving-api
-       pip install python-mnist
-       pip install Pillow
+Run a sample client code to predict images(See mnist-client.py)
 
-       TF_MNIST_IMAGE_PATH=data/7.png python mnist_client.py
 
- You should see the following result
+        virtualenv --system-site-packages env
+        source ./env/bin/activate
+        easy_install -U pip
+        pip install --upgrade tensorflow
+        pip install tensorflow-serving-api
+        pip install python-mnist
+        pip install Pillow
 
-      Your model says the above number is... 7!
+        TF_MNIST_IMAGE_PATH=data/7.png python mnist_client.py
 
- Now try a different image in `data` directory :)
+You should see the following result
+
+        Your model says the above number is... 7!
+
+Now try a different image in `data` directory :)
 
 ## Using a web application
 ### LoadBalancer
 
- This is ideal if you would like to create a test web application exposed by a loadbalancer. 
+This is ideal if you would like to create a test web application exposed by a loadbalancer.
 
-       MNIST_SERVING_IP=`kubectl -n ${NAMESPACE} get svc/mnist --output=jsonpath={.spec.clusterIP}`
-       echo "MNIST_SERVING_IP is ${MNIST_SERVING_IP}"
+    MNIST_SERVING_IP=`kubectl -n ${NAMESPACE} get svc/mnist --output=jsonpath={.spec.clusterIP}`
+    echo "MNIST_SERVING_IP is ${MNIST_SERVING_IP}"
 
- Create image using Dockerfile in the webapp folder and upload to DockerHub
-     
-      CLIENT_IMAGE=${DOCKER_BASE_URL}/mnist-client
-      docker build . --no-cache  -f Dockerfile -t ${CLIENT_IMAGE}
-      docker push ${CLIENT_IMAGE}
+Create image using Dockerfile in the webapp folder and upload to DockerHub
 
-      echo "CLIENT_IMAGE is ${CLIENT_IMAGE}"
-      ks generate tf-mnist-client tf-mnist-client --mnist_serving_ip=${MNIST_SERVING_IP} --image=${CLIENT_IMAGE}
+    CLIENT_IMAGE=${DOCKER_BASE_URL}/mnist-client
+    docker build . --no-cache  -f Dockerfile -t ${CLIENT_IMAGE}
+    docker push ${CLIENT_IMAGE}
 
-      ks apply ${KF_ENV} -c tf-mnist-client
-      
-      #Ensure that all pods are running in the namespace set in variables.bash. 
-      kubectl get pods -n ${NAMESPACE}
- 
-  Now get the loadbalancer IP of the tf-mnist-client service
- 
-      kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+    echo "CLIENT_IMAGE is ${CLIENT_IMAGE}"
+    ks generate tf-mnist-client tf-mnist-client --mnist_serving_ip=${MNIST_SERVING_IP} --image=${CLIENT_IMAGE}
 
-  Open browser and see app at http://LoadBalancerIP 
-  
+    ks apply ${KF_ENV} -c tf-mnist-client
+
+    #Ensure that all pods are running in the namespace set in variables.bash.
+    kubectl get pods -n ${NAMESPACE}
+
+Now get the loadbalancer IP of the tf-mnist-client service
+
+    kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+
+Open browser and see app at http://LoadBalancerIP
+
 ### NodePort
 
- Another way to expose your web application on the Internet is NodePort. Define variables in variables.bash and run the following script: 
- 
+Another way to expose your web application on the Internet is NodePort. Define
+variables in variables.bash and run the following script:
+
  ```
    ./webapp.bash
  ```
-  
-  After running this script, you will get the IP adress of your web application. Open browser and see app at http://IP_ADRESS:NodePort
-  
-# Extras
-  
-## Using Persistent Volumes
-       
-Currently, this example uses a [NFS server](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/install.bash#L53) that is automatically deployed in your Kubernetes cluster. If you have an external NFS server, you can provide its IP during the nfs-volume deployment. See [nfs-volume deployment](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/install.bash#L61) step.
 
-If you would like to have a different persistent volume, you can create a Kubernetes [pvc](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)  with the value set in the variables.bash file. See [`NFS_PVC_NAME`](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/variables.bash#L19) variable
-       
+After running this script, you will get the IP adress of your web application.
+Open browser and see app at http://IP_ADRESS:NodePort
+
+# Extras
+
+## Using Persistent Volumes
+
+Currently, this example uses a [NFS
+server](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/install.bash#L53)
+that is automatically deployed in your Kubernetes cluster. If you have an
+external NFS server, you can provide its IP during the nfs-volume deployment.
+See [nfs-volume
+deployment](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/install.bash#L61)
+step.
+
+If you would like to have a different persistent volume, you can create a
+Kubernetes
+[pvc](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)  with the
+value set in the variables.bash file. See
+[`NFS_PVC_NAME`](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/variables.bash#L19)
+variable
+
 
 ## Retrain your model
 
-     
-If you want to change the training image, set `image` to your new training image. See the [prototype generation](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/train.bash#L21)
- 
-        ks param set ${JOB} image ${IMAGE}
-        
- If you would like to retrain the model(with a new image or not), you can delete the current training job and create a new one. See the [training](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/train.bash#L28) step. 
+If you want to change the training image, set `image` to your new training
+image. See the [prototype
+generation](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/train.bash#L21)
 
-         ks delete ${KF_ENV} -c ${JOB}  
+        ks param set ${JOB} image ${IMAGE}
+
+If you would like to retrain the model(with a new image or not), you can delete
+the current training job and create a new one. See the
+[training](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/train.bash#L28)
+step.
+
+         ks delete ${KF_ENV} -c ${JOB}
          ks apply ${KF_ENV} -c ${JOB}
-    
+
