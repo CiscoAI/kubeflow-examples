@@ -6,6 +6,8 @@
 - [Installation](#installation)
 - [Setup](#setup)
 - [Model Testing](#model-testing)
+    - [Using a local Python client](#using-a-local-python-client)
+    - [Using a web application](#using-a-web-application)
 - [Extras](#extras)
 
 # Overview of the application
@@ -122,25 +124,24 @@ service for the local clients.
 
 Port forward to access the serving port locally
 
-        ./portf.bash
+    ./portf.bash
 
 
 Run a sample client code to predict images(See mnist-client.py)
 
+    virtualenv --system-site-packages env
+    source ./env/bin/activate
+    easy_install -U pip
+    pip install --upgrade tensorflow
+    pip install tensorflow-serving-api
+    pip install python-mnist
+    pip install Pillow
 
-        virtualenv --system-site-packages env
-        source ./env/bin/activate
-        easy_install -U pip
-        pip install --upgrade tensorflow
-        pip install tensorflow-serving-api
-        pip install python-mnist
-        pip install Pillow
-
-        TF_MNIST_IMAGE_PATH=data/7.png python mnist_client.py
+    TF_MNIST_IMAGE_PATH=data/7.png python mnist_client.py
 
 You should see the following result
 
-        Your model says the above number is... 7!
+    Your model says the above number is... 7!
 
 Now try a different image in `data` directory :)
 
