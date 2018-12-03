@@ -76,7 +76,8 @@ If above commands succeeds, you are good to go !
         kubectl get pods -n kubeflow
 
 If there is any rate limit error from github, please follow the instructions at:
-[Github Token Setup](https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors)
+1. Generate a new token.(https://blog.github.com/2013-05-16-personal-api-tokens)
+2. export GITHUB_TOKEN=<token> 
 
 
 # Setup
