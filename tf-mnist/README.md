@@ -129,6 +129,7 @@ Port forward to access the serving port locally
 
 Run a sample client code to predict images(See mnist-client.py)
 
+    pip install virutalenv
     virtualenv --system-site-packages env
     source ./env/bin/activate
     easy_install -U pip
@@ -149,17 +150,21 @@ Now try a different image in `data` directory :)
 ### LoadBalancer
 
 This is ideal if you would like to create a test web application exposed by a loadbalancer.
+    source ./variables.bash
 
     MNIST_SERVING_IP=`kubectl -n ${NAMESPACE} get svc/mnist --output=jsonpath={.spec.clusterIP}`
     echo "MNIST_SERVING_IP is ${MNIST_SERVING_IP}"
 
 Create image using Dockerfile in the webapp folder and upload to DockerHub
 
-    CLIENT_IMAGE=${DOCKER_BASE_URL}/mnist-client
+    #CLIENT_IMAGE=${DOCKER_BASE_URL}/mnist-client- this can't be accessed so use the below image 
+    CLIENT_IMAGE=johnugeorge/mnist-client  
+    ---use this if you have done any code changes, otherwise you can skip the following two docker commands--	
     docker build . --no-cache  -f Dockerfile -t ${CLIENT_IMAGE}
     docker push ${CLIENT_IMAGE}
 
     echo "CLIENT_IMAGE is ${CLIENT_IMAGE}"
+    cd mnist	
     ks generate tf-mnist-client tf-mnist-client --mnist_serving_ip=${MNIST_SERVING_IP} --image=${CLIENT_IMAGE}
 
     ks apply ${KF_ENV} -c tf-mnist-client
@@ -169,9 +174,9 @@ Create image using Dockerfile in the webapp folder and upload to DockerHub
 
 Now get the loadbalancer IP of the tf-mnist-client service
 
-    kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+    kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].ip}' - outputs the IP
 
-Open browser and see app at http://LoadBalancerIP
+Open browser and see app at http://LoadBalancerIP 
 
 ### NodePort
 
