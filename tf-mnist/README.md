@@ -77,7 +77,7 @@ If above commands succeeds, you are good to go !
 
 If there is any rate limit error from github, please follow the instructions at:
 1. Generate a new token.(https://blog.github.com/2013-05-16-personal-api-tokens)
-2. export GITHUB_TOKEN=<token> 
+2. Put in your bashrc `export GITHUB_TOKEN=<token>` 
 
 
 # Setup
