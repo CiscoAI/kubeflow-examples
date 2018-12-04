@@ -221,3 +221,11 @@ step.
          ks delete ${KF_ENV} -c ${JOB}
          ks apply ${KF_ENV} -c ${JOB}
 
+# Cleanup
+To cleanup all the pods created
+
+	./cleanup.bash
+	
+If any pods doesn't get terminated, you may try 
+
+	kubectl delete pod <pod_name> --force -n kubeflow --grace-period=0
