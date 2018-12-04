@@ -157,8 +157,7 @@ This is ideal if you would like to create a test web application exposed by a lo
 
 Create image using Dockerfile in the webapp folder and upload to DockerHub
 
-    #CLIENT_IMAGE=${DOCKER_BASE_URL}/mnist-client- this can't be accessed so use the below image 
-    CLIENT_IMAGE=johnugeorge/mnist-client  
+    CLIENT_IMAGE=${DOCKER_BASE_URL}/mnist-client- this can't be accessed so use the below image 
     ---use this if you have done any code changes, otherwise you can skip the following two docker commands--	
     docker build . --no-cache  -f Dockerfile -t ${CLIENT_IMAGE}
     docker push ${CLIENT_IMAGE}
@@ -174,9 +173,9 @@ Create image using Dockerfile in the webapp folder and upload to DockerHub
 
 Now get the loadbalancer IP of the tf-mnist-client service
 
-    kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].ip}' - outputs the IP
+    kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
 
-Open browser and see app at http://LoadBalancerIP 
+Open browser and see app at http://LoadBalancerIP
 
 ### NodePort
 
