@@ -19,7 +19,7 @@ pwd
 
 #2. Create namespace if not present
 
-ks generate tf-serving tfserving --name=${APP_NAME}
+ks generate tf-serving tfserving --name="mnist"
 
 # Set tf serving job specific environment params
 ks param set tfserving modelPath ${NFS_MODEL_PATH}
