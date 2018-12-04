@@ -157,7 +157,7 @@ This is ideal if you would like to create a test web application exposed by a lo
 
 Create image using Dockerfile in the webapp folder and upload to DockerHub
 
-    CLIENT_IMAGE=${DOCKER_BASE_URL}/mnist-client- this can't be accessed so use the below image 
+    CLIENT_IMAGE=${DOCKER_BASE_URL}/mnist-client
     ---use this if you have done any code changes, otherwise you can skip the following two docker commands--	
     docker build . --no-cache  -f Dockerfile -t ${CLIENT_IMAGE}
     docker push ${CLIENT_IMAGE}

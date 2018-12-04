@@ -7,7 +7,6 @@ pwd
 ks delete ${KF_ENV} -c tfserving
 kubectl get pods -n ${NAMESPACE}
 
-JOB=tf-mnistjob
 ks delete ${KF_ENV} -c ${JOB} 
 
 ks delete ${KF_ENV} -c nfs-volume

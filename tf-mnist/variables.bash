@@ -24,6 +24,7 @@ TF_DATA_DIR=/mnt/data
 TF_MODEL_DIR=/mnt/model
 NFS_MODEL_PATH=/mnt/export
 TF_EXPORT_DIR=${NFS_MODEL_PATH}
+JOB=tf-mnistjob
 
 # If you want to use your own image,
 # make sure you have a dockerhub account and change

@@ -17,7 +17,6 @@ pwd
 # training job when created.
 ENV="TF_DATA_DIR=$TF_DATA_DIR,TF_EXPORT_DIR=$TF_EXPORT_DIR,TF_MODEL_DIR=$TF_MODEL_DIR"
 
-JOB=tf-mnistjob
 ks generate ${JOB} ${JOB}
 
 # Set tf training job specific environment params
