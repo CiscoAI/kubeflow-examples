@@ -220,7 +220,7 @@ step.
 
          ks delete ${KF_ENV} -c ${JOB}
          ks apply ${KF_ENV} -c ${JOB}
-##Clean up pods
+## Clean up pods
 	
 	./cleanup.bash
 
