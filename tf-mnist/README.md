@@ -221,3 +221,13 @@ step.
          ks delete ${KF_ENV} -c ${JOB}
          ks apply ${KF_ENV} -c ${JOB}
 
+## Delete a pod
+
+If you want to delete all pods and clean up the jobs, run following script:
+
+	./cleanup.bash
+
+To forcefully delete a pod, use:
+
+	kubectl delete pod <pod-name> --force -n <namespace> --grace-period=0
+
