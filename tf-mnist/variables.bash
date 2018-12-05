@@ -26,6 +26,10 @@ NFS_MODEL_PATH=/mnt/export
 TF_EXPORT_DIR=${NFS_MODEL_PATH}
 JOB=tf-mnistjob
 
+## Used in serve.bash
+# Model name
+MODEL_NAME=mnist
+
 # If you want to use your own image,
 # make sure you have a dockerhub account and change
 # DOCKER_BASE_URL and IMAGE below.

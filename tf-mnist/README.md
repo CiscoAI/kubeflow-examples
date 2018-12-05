@@ -163,7 +163,7 @@ Create image using Dockerfile in the webapp folder and upload to DockerHub
     docker push ${CLIENT_IMAGE}
 
     echo "CLIENT_IMAGE is ${CLIENT_IMAGE}"
-    cd mnist	
+    cd ${APP_NAME} 
     ks generate tf-mnist-client tf-mnist-client --mnist_serving_ip=${MNIST_SERVING_IP} --image=${CLIENT_IMAGE}
 
     ks apply ${KF_ENV} -c tf-mnist-client
