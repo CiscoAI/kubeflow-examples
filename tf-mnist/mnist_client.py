@@ -20,6 +20,7 @@ TF_MODEL_SERVER_PORT = int(os.getenv("TF_MODEL_SERVER_PORT", 9000))
 TF_DATA_DIR = os.getenv("TF_DATA_DIR", "/tmp/data/")
 TF_MNIST_IMAGE_PATH = os.getenv("TF_MNIST_IMAGE_PATH", None)
 TF_MNIST_TEST_IMAGE_NUMBER = int(os.getenv("TF_MNIST_TEST_IMAGE_NUMBER", -1))
+MODEL_NAME = os.getenv("MODEL_NAME", "modelname")
 
 if TF_MNIST_IMAGE_PATH != None:
   raw_image = Image.open(TF_MNIST_IMAGE_PATH)
@@ -37,7 +38,7 @@ channel = implementations.insecure_channel(
 stub = prediction_service_pb2.beta_create_PredictionService_stub(channel)
 
 request = predict_pb2.PredictRequest()
-request.model_spec.name = "mnist"
+request.model_spec.name = MODEL_NAME
 request.model_spec.signature_name = "serving_default"
 request.inputs['x'].CopyFrom(
     tf.contrib.util.make_tensor_proto(image, shape=[1, 28, 28]))

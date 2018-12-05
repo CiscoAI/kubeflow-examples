@@ -152,7 +152,7 @@ Now try a different image in `data` directory :)
 This is ideal if you would like to create a test web application exposed by a loadbalancer.
     source ./variables.bash
 
-    MNIST_SERVING_IP=`kubectl -n ${NAMESPACE} get svc/mnist --output=jsonpath={.spec.clusterIP}`
+    MNIST_SERVING_IP=`kubectl -n ${NAMESPACE} get svc/${MODEL_NAME} --output=jsonpath={.spec.clusterIP}`
     echo "MNIST_SERVING_IP is ${MNIST_SERVING_IP}"
 
 Create image using Dockerfile in the webapp folder and upload to DockerHub
