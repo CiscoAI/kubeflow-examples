@@ -13,7 +13,7 @@ KUBEFLOW_GITHUB_VERSION=v0.3.0-rc.3
 CISCOAI_GITHUB_VERSION=master
 
 ## GITHUB version for kubebench components
-KB_VERSION=master
+KB_VERSION=v0.3.0
 ## Ksonnet environment name
 KF_ENV=nativek8s
 

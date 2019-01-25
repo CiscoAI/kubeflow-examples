@@ -29,29 +29,6 @@ def get_pods():
   cmd = "kubectl get pods -n default"
   util.run(cmd.split())
 
-def copy_job_config():
-
-  config.load_kube_config()
-
-  v1=client.CoreV1Api()
-  nfs_server_pod = None
-  ret = v1.list_namespaced_pod("default",watch=False)
-  for i in ret.items:
-    if((i.metadata.labels.get("role") != None) & (i.metadata.labels.get("role") == "nfs-server")):
-      nfs_server_pod = i.metadata.name
-  if(nfs_server_pod == None):
-    logging.info("nfs server pod NOT found")
-    return 0
-
-  cmd = "kubectl -n default exec " + nfs_server_pod + " -- mkdir -p /exports/kubebench/config"
-  util.run(cmd.split())
-  cmd = "kubectl -n default exec " + nfs_server_pod + " -- mkdir -p /exports/kubebench/data"
-  util.run(cmd.split())
-  cmd = "kubectl -n default exec " + nfs_server_pod + " -- mkdir -p /exports/kubebench/experiments"
-  util.run(cmd.split())
-  cmd = "kubectl cp ../config/tf_cnn_benchmarks/tf-cnn-dummy.yaml default/" + nfs_server_pod + ":/exports/kubebench/config/tf-cnn-dummy.yaml"
-  util.run(cmd.split())
-
 def check_kb_job(app):
 
   config.load_kube_config()
@@ -169,9 +146,8 @@ if __name__ == "__main__":
   time.sleep(60)
   get_pods()
   config_svc_account()
-  copy_job_config()
   util.run(["./run_kb.bash"])
-  time.sleep(240)
+  time.sleep(300)
   ret = check_kb_job(app)
   if not ret:
     logging.error("One or more test steps failed exiting with non-zero exit "

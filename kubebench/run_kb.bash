@@ -16,8 +16,7 @@ ks generate kubebench-job ${JOB_NAME} --name=${JOB_NAME}
 
 ks param set ${JOB_NAME} name ${JOB_NAME}
 ks param set ${JOB_NAME} namespace ${NAMESPACE}
-ks param set ${JOB_NAME} experimentConfigPvc ${CONFIG_PVC_NAME}
-ks param set ${JOB_NAME} experimentRecordPvc ${EXP_PVC_NAME}
+ks param set ${JOB_NAME} mainJobKsRegistry github.com/kubeflow/kubebench/tree/${KB_VERSION}/kubebench
 
 ks apply ${KF_ENV} -c ${JOB_NAME}
 
