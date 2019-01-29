@@ -7,7 +7,7 @@ NAMESPACE=kubeflow
 APP_NAME=mnist
 
 ## GITHUB version for official kubeflow components
-KUBEFLOW_GITHUB_VERSION=v0.3.0-rc.3
+KUBEFLOW_GITHUB_VERSION=v0.4.1
 
 ## GITHUB version for ciscoai components
 CISCOAI_GITHUB_VERSION=master
@@ -43,4 +43,3 @@ DOCKER_HUB=gcr.io
 DOCKER_USERNAME=cpsg-ai-demo
 DOCKER_IMAGE=mnist-client
 WEBAPP_FOLDER=webapp
-

@@ -71,12 +71,12 @@ local replicas = std.map(function(s)
                              template+: {
                                spec+: {
                                   volumes: [ { name: "nfsvolume", persistentVolumeClaim: { claimName: "nfs" } } ] ,
-                                 
+
                                   containers: [
                                    s.template.spec.containers[0] {
                                            volumeMounts: [ { mountPath: mountPath , name: "nfsvolume" } ],
-                                           env: envs 
-                                
+                                           env: envs
+
                                    },
                                  ],
                                },
@@ -92,7 +92,7 @@ local job =
     if numPs < 1 then
       error "num_ps must be >= 1"
     else {
-      apiVersion: "kubeflow.org/v1alpha2",
+      apiVersion: "kubeflow.org/v1beta1",
       kind: "TFJob",
       metadata: {
         name: name,
