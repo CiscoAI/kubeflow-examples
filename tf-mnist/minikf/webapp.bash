@@ -35,5 +35,5 @@ kubectl get pods -n ${NAMESPACE}
 
 # get nodePort
 NODE_PORT=`kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.spec.ports[0].nodePort}'`
-CLUSTER_IP=`hostname -I | awk '{print $1}'`
+CLUSTER_IP=`hostname -I | awk '{print $2}'`
 echo "Visit your webapp at ${CLUSTER_IP}:${NODE_PORT}"

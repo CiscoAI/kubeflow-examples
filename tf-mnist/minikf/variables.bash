@@ -37,6 +37,7 @@ IMAGE=${DOCKER_BASE_URL}/tf-mnist-demo:v1
 # Used in portf.bash and webapp.bash
 # If using without an application, source this file before using
 PORT=9000
+VAGRANT_IP=10.10.10.10
 export TF_MODEL_SERVER_PORT=${PORT}
 
 # Used in webapp.bash
