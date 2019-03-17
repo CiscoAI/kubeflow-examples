@@ -1,9 +1,9 @@
 # Table of Contents
 - [Overview of the application in miniKF](#overview-of-the-application)
 - [Prerequisites](#prerequisites)
-- [MiniKF VM](#minikf-vm)
-- [Steps in MiniKF VM](#steps-in-minikf-vm)
-	- [KF Packages Installation](#kf-packages-installation)
+- [MiniKF VM](#login-to-minikf-vm)
+- [Steps in MiniKF VM](#steps-in-vm)
+	- [Installation](#installation)
 	- [Setup](#setup)
 	- [Model Testing](#model-testing)
 	- [Extras](#extras)
@@ -26,19 +26,18 @@ This tutorial demonstrates:
 
 # Prerequisites
 
-**miniKF**
+## MiniKF
 
 Install miniKF by following the instructions outlined here(https://www.kubeflow.org/docs/started/getting-started-minikf/)
 If the IP, 10.10.10.10 is accessible from the broswer, you are good to go !
 
-# MiniKF VM
+# Login to MiniKF VM
 
-Login to the VM
 	
 	vagrant ssh
 	
 	
-# Steps in MiniKF VM
+# Steps in VM
 
 Install the following packages
 	
@@ -49,12 +48,10 @@ Clone the KFLab repo
 	git clone https://github.com/ciscoAI/KFLab YOUR_REPO_DIR
 	cd YOUR_REPO_DIR/tf-mnist/minikf 
 	
-## KF Packages Installation
+## Installation
 
         ./install.bash
-
-
-        # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
+	# Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
         kubectl get pods -n kubeflow
 
 If there is any rate limit error from github, please follow the instructions at:
@@ -69,27 +66,22 @@ If there is any rate limit error from github, please follow the instructions at:
    create one at [https://hub.docker.com/](https://hub.docker.com/), upload your image there, and do the following
    (replace <username> and <container> with appropriate values).
 
-       ```
        DOCKER_BASE_URL=docker.io/<username>
        IMAGE=${DOCKER_BASE_URL}/<image>
        docker build . --no-cache  -f Dockerfile -t ${IMAGE}
        docker push ${IMAGE}
-       ```
 
 
 2. Run the training job setup script
 
-       ```
 	   ./train.bash
        # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
        kubectl get pods -n kubeflow
-       ```
+
 
 3. Start TF serving on the trained results
 
-       ```
        ./serve.bash
-       ```
 
 
 4. Port forward to access the serving port locally
