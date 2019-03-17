@@ -1,5 +1,5 @@
 # Table of Contents
-- [Overview of the application in miniKF](#overview-of-the-application)
+- [Overview of the application in miniKF](#overview-of-the-application-in-minikf)
 - [Prerequisites](#prerequisites)
 - [MiniKF VM](#login-to-minikf-vm)
 - [Steps in MiniKF VM](#steps-in-vm)
@@ -8,10 +8,11 @@
 	- [Model Testing](#model-testing)
 	- [Extras](#extras)
 
-# Overview of the application
+# Overview of the application in MiniKF
 This tutorial contains instructions to build an **end to end kubeflow app** on a
 Kubernetes cluster running on miniKF with minimal prerequisites.
 The mnist model is trained and served from an NFS mount.
+The client is intended to run on the laptop.
 **This example is intended for
 beginners with zero/minimal experience in kubeflow.**
 
@@ -91,9 +92,9 @@ If there is any rate limit error from github, please follow the instructions at:
     
 ## Model Testing
 
-The model can be tested using a python client or via web application
+The model can be tested using a python client or via web application from the laptop
 
-### Using a python client from the laptop
+### Using a python client
 
 
 Run a sample client code to predict images(See mnist-client.py)
