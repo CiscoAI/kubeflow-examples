@@ -1,19 +1,16 @@
 # Table of Contents
-- [Overview of the application](#overview-of-the-application)
-    - [Overall Structure](#overall-structure)
-    - [GKE Specific Structure](#gke-specific-structure)
+- [Overview of the application in miniKF](#overview-of-the-application)
 - [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Setup](#setup)
-- [Model Testing](#model-testing)
-    - [Using a local Python client](#using-a-local-python-client)
-    - [Using a web application](#using-a-web-application)
-- [Extras](#extras)
+- [MiniKF VM](#minikf-vm)
+- [Steps in MiniKF VM](#steps-in-minikf-vm)
+	- [KF Packages Installation](#kf-packages-installation)
+	- [Setup](#setup)
+	- [Model Testing](#model-testing)
+	- [Extras](#extras)
 
 # Overview of the application
 This tutorial contains instructions to build an **end to end kubeflow app** on a
-Kubernetes cluster running on Google Kubernetes Engine (GKE) with minimal prerequisites.
-*It should work on any other K8s cluster as well.*
+Kubernetes cluster running on miniKF with minimal prerequisites.
 The mnist model is trained and served from an NFS mount.
 **This example is intended for
 beginners with zero/minimal experience in kubeflow.**
@@ -24,50 +21,35 @@ This tutorial demonstrates:
 * Export the trained Tensorflow model and serve using tensorflow-model-server
 * Test/Predict images with a python client(*See mnist_client.py*)
 
-## Overall Structure
-![Generic Schematic](pictures/generic_schematic.png?raw=true "Generic Schematic of MNIST application")
-This picture shows the overall schematic without any Google Kubernetes Engine
-specifics. After the `install` step, the MNIST images are downloaded (from
-inside the code) to the `train` stage. The `train` stage keeps updating the
-parameters in the `persistent parameter storage`, a storage that persists even
-if the containers and the clusters go down. The `client` app sends an image to
-the `serve` stage that in turn retrieves the parameters from the `persistent
-parameter storage` and uses these parameters to predict the image and send
-the response back to the `client`.
 
-## GKE Specific Structure
-![Google Kubernetes Engine Schematic](pictures/gke_schematic.png?raw=true "GKE Schematic of MNIST application")
-The exact implementation on GKE looks somewhat like the above image. There is
-one `tf-master` and possibly multiple `tf-worker` and `tf-ps` (parameter server)
-pods that form the `train` stage.
-The exact number of replicas for each pod is outside the scope of this document and
-_is a hyperparameter to be played with in order to scale this application_.
-The parameter are then stored on an `NFS` persistent volume. Finally, multiple
-`tf-serve` pods implement the `serve` stage. The `Browser/App` (outside the
-logical GKE cluster where the `train` and `serve` stages run) connects with the
-`serve` stage to get a prediction of an image.
 
 
 # Prerequisites
 
-1. **kubectl cli**
+**miniKF**
 
-   Check if kubectl  is configured properly by accessing the cluster Info of your kubernetes cluster
+Install miniKF by following the instructions outlined here(https://www.kubeflow.org/docs/started/getting-started-minikf/)
+If the IP, 10.10.10.10 is accessible from the broswer, you are good to go !
 
-        $ kubectl cluster-info
+# MiniKF VM
 
-2. **ksonnet**
+Login to the VM
+	
+	vagrant ssh
+	
+	
+# Steps in MiniKF VM
 
-    Check ksonnet version
-
-        $ ks version
-
-    Ksonnet version must be greater than or equal to **0.11.0**. Upgrade to the latest if it is an older version
-
-If above commands succeeds, you are good to go !
-
-
-# Installation
+Install the following packages
+	
+	sudo apt-get install nfs-common
+	
+Clone the KFLab repo
+	
+	git clone https://github.com/ciscoAI/KFLab YOUR_REPO_DIR
+	cd YOUR_REPO_DIR/tf-mnist/minikf 
+	
+## KF Packages Installation
 
         ./install.bash
 
@@ -79,7 +61,7 @@ If there is any rate limit error from github, please follow the instructions at:
 [Github Token Setup](https://github.com/ksonnet/ksonnet/blob/master/docs/troubleshooting.md#github-rate-limiting-errors)
 
 
-# Setup
+## Setup
 
 1.  (**Optional**) If you want to use a custom image for training, create the training Image and upload to DockerHub. Else, skip this step to use the already existing image (`gcr.io/cpsg-ai-demo/tf-mnist-demo:v1`).
 
@@ -93,9 +75,6 @@ If there is any rate limit error from github, please follow the instructions at:
        docker build . --no-cache  -f Dockerfile -t ${IMAGE}
        docker push ${IMAGE}
        ```
-
-> **NOTE.** Images kept in gcr.io might make things faster since it keeps images within GKE, thus avoiding delays of accessing the image
-> from a remote container registry.
 
 
 2. Run the training job setup script
@@ -112,19 +91,17 @@ If there is any rate limit error from github, please follow the instructions at:
        ./serve.bash
        ```
 
-# Model Testing
 
-The model can be tested using a local python client or via web application
+4. Port forward to access the serving port locally
 
-## Using a local python client
+    	./portf.bash
+    
+    
+## Model Testing
 
-This is the easiest way to test your model if your kubernetes cluster does not
-support external loadbalancers. It uses port forwarding to expose the serving
-service for the local clients.
+The model can be tested using a python client or via web application
 
-Port forward to access the serving port locally
-
-    ./portf.bash
+### Using a python client from the laptop
 
 
 Run a sample client code to predict images(See mnist-client.py)
@@ -137,7 +114,7 @@ Run a sample client code to predict images(See mnist-client.py)
     pip install python-mnist
     pip install Pillow
 
-    TF_MNIST_IMAGE_PATH=data/7.png python mnist_client.py
+    TF_MODEL_SERVER_HOST=10.10.10.10 TF_MNIST_IMAGE_PATH=data/7.png python mnist_client.py
 
 You should see the following result
 
@@ -145,35 +122,8 @@ You should see the following result
 
 Now try a different image in `data` directory :)
 
-## Using a web application
-### LoadBalancer
-
-This is ideal if you would like to create a test web application exposed by a loadbalancer.
-
-    MNIST_SERVING_IP=`kubectl -n ${NAMESPACE} get svc/mnist --output=jsonpath={.spec.clusterIP}`
-    echo "MNIST_SERVING_IP is ${MNIST_SERVING_IP}"
-
-Create image using Dockerfile in the webapp folder and upload to DockerHub
-
-    CLIENT_IMAGE=${DOCKER_BASE_URL}/mnist-client
-    docker build . --no-cache  -f Dockerfile -t ${CLIENT_IMAGE}
-    docker push ${CLIENT_IMAGE}
-
-    echo "CLIENT_IMAGE is ${CLIENT_IMAGE}"
-    ks generate tf-mnist-client tf-mnist-client --mnist_serving_ip=${MNIST_SERVING_IP} --image=${CLIENT_IMAGE}
-
-    ks apply ${KF_ENV} -c tf-mnist-client
-
-    #Ensure that all pods are running in the namespace set in variables.bash.
-    kubectl get pods -n ${NAMESPACE}
-
-Now get the loadbalancer IP of the tf-mnist-client service
-
-    kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
-
-Open browser and see app at http://LoadBalancerIP
-
-### NodePort
+### Using a web application
+#### NodePort
 
 Another way to expose your web application on the Internet is NodePort. Define
 variables in variables.bash and run the following script:
@@ -183,27 +133,9 @@ variables in variables.bash and run the following script:
  ```
 
 After running this script, you will get the IP adress of your web application.
-Open browser and see app at http://IP_ADRESS:NodePort
+Open browser and see app at http://10.10.10.10:NodePort from your laptop.
 
-# Extras
-
-## Using Persistent Volumes
-
-Currently, this example uses a [NFS
-server](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/install.bash#L53)
-that is automatically deployed in your Kubernetes cluster. If you have an
-external NFS server, you can provide its IP during the nfs-volume deployment.
-See [nfs-volume
-deployment](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/install.bash#L61)
-step.
-
-If you would like to have a different persistent volume, you can create a
-Kubernetes
-[pvc](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)  with the
-value set in the variables.bash file. See
-[`NFS_PVC_NAME`](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/variables.bash#L19)
-variable
-
+## Extras
 
 ## Retrain your model
 
@@ -220,20 +152,13 @@ step.
 
          ks delete ${KF_ENV} -c ${JOB}
          ks apply ${KF_ENV} -c ${JOB}
-## Clean up pods
+
+### Clean up pods
 	
 	./cleanup.bash
 
    Forcefully terminate pods using:
    
    	$ kubectl delete pod <pod_name> --force -n kubeflow --grace-period=0
-	
-### Note
 
-If container needs to use an HTTP, HTTPS, or FTP proxy server (for internet connectivity), configure it by setting the environment variables when building docker image. Set the HTTP, HTTPS, or FTP proxy server environment variable in Dockerfile.
-    
-	ENV HTTPS_PROXY "https://127.0.0.1:3001"
-	ENV HTTP_PROXY "http://127.0.0.1:3001"
-	ENV FTP_PROXY "ftp://127.0.0.1:3001"
-	ENV NO_PROXY "*.test.example.com,.example2.com"
     
