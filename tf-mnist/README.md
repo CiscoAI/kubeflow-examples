@@ -50,7 +50,7 @@ logical GKE cluster where the `train` and `serve` stages run) connects with the
 ## Note for Non-GKE users
 
 If there is no GKE k8s cluster available, there is still an option of trying out this example on your laptop or server.
-Please refer to [MiniKF Readme](https://github.com/ramdootp/KFLab/blob/master/tf-mnist/minikf)
+Please refer to [MiniKF Readme](https://github.com/ciscoAI/KFLab/blob/master/tf-mnist/minikf)
 
 # Prerequisites
 
