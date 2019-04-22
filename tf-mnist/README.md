@@ -72,7 +72,7 @@ Please refer to [MiniKF Readme](https://github.com/ciscoAI/KFLab/blob/master/tf-
 
 ## Google Kubernetes Engine Prerequisites
 
-1. Create a Google Cloud Account
+1. Create a [Google Cloud Account](https://console.cloud.google.com/)
 
 2. Navigate in the Google Cloud Console to Google Kubernetes Engine and create a cluster.
 
@@ -87,6 +87,9 @@ Please refer to [MiniKF Readme](https://github.com/ciscoAI/KFLab/blob/master/tf-
 6. Press the 'connect' button against your created cluster, then copy the command it provides you and execute it on your shell.
 
 7. `kubectl config current-context` should return your cluster name which you created.
+
+8. Create a cluster role for your user by running:  
+`kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=<your@email.com>`
 
 If above commands succeeds, you are good to go !
 
