@@ -56,6 +56,8 @@ Please refer to [MiniKF Readme](https://github.com/ciscoAI/KFLab/blob/master/tf-
 
 ## Google Kubernetes Engine Prerequisites
 
+### Google Cloud Account Users
+
 1. Create a [Google Cloud Account](https://console.cloud.google.com/)
 
 2. Navigate in the Google Cloud Console to Google Kubernetes Engine and create a cluster.
@@ -74,6 +76,39 @@ Please refer to [MiniKF Readme](https://github.com/ciscoAI/KFLab/blob/master/tf-
 
 8. Create a cluster role for your user by running:  
 `kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=<your@email.com>`
+
+### Serviceaccount Users
+
+1. Each team/person will be given a service account.
+2. Install [gcloud](https://cloud.google.com/sdk/docs/quickstart-macos) on your
+   macbooks.
+3. Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) on
+   your macbooks.
+4. Activate service account (```service-acc-name``` and ```json-file-name``` will be
+   provided)
+```
+gcloud auth activate-service-account <service-acc-name> --key-file=<json-file-name> --project=ml-bootcamp-2018
+
+Example (uses team-blr-1):
+gcloud auth activate-service-account team-blr-1@ml-bootcamp-2018.iam.gserviceaccount.com --key-file=ml-bootcamp-2018-409e6b4a7257.json --project=ml-bootcamp-2018
+
+```
+5. Get kubeconfig for your cluster (```cluster-name``` and ```zone-name``` will
+   be provided)
+```
+gcloud container clusters get-credentials <cluster-name> --zone <zone-name>
+
+Example (uses team-blr-1):
+gcloud container clusters get-credentials team-blr-1 --zone asia-south1-c
+```
+6. Enable admin cluster role binding (```your-user-cluster-admin-binding``` was
+   retrieved in the previous step) (only 1 team member should run the below command)
+```
+kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=<service-acc-name>
+
+Example (uses team-blr-1):
+kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=team-blr-1@ml-bootcamp-2018.iam.gserviceaccount.com
+```
 
 ## Setup CLI tools and other accounts
 
