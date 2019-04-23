@@ -203,6 +203,16 @@ Now get the loadbalancer IP of the tf-mnist-client service
 
 Open browser and see app at http://LoadBalancerIP
 
+### Port Forwarding
+
+A simple way to expose your web application is by port forwarding the mnist client service to your laptop. 
+
+ ```
+   ./webapp.bash
+ ```
+
+After running this script, open browser and see app at http://127.0.0.1:9001
+
 ### NodePort
 
 Another way to expose your web application on the Internet is NodePort. Define
