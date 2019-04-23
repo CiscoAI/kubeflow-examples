@@ -77,7 +77,7 @@ Please refer to [MiniKF Readme](https://github.com/ciscoAI/KFLab/blob/master/tf-
 8. Create a cluster role for your user by running:  
 `kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=<your@email.com>`
 
-### Serviceaccount Users
+### Service Account Users
 
 1. Each team/person will be given a service account.
 2. Install [gcloud](https://cloud.google.com/sdk/docs/quickstart-macos) on your
