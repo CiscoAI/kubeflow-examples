@@ -41,5 +41,7 @@ export TF_MODEL_SERVER_PORT=${PORT}
 # Used in webapp.bash
 DOCKER_HUB=gcr.io
 DOCKER_USERNAME=cpsg-ai-demo
-DOCKER_IMAGE=mnist-client
+DOCKER_IMAGE=mnist-client-latest
 WEBAPP_FOLDER=webapp
+
+WEBAPP_PORT=9001
