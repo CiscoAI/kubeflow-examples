@@ -74,12 +74,12 @@ local deployment = {
                   "volumeMounts": [
                      {
                         "mountPath": /mnt,
-						            "name": nfs
+			"name": nfs
                      }
                   ],
                }
             ],
-			      "volumes": [
+	    "volumes": [
                     {
                         "name": "nfs",
                         "persistentVolumeClaim": {
