@@ -78,6 +78,10 @@ Please refer to [MiniKF Readme](https://github.com/ciscoAI/KFLab/blob/master/tf-
 </p>
 
 3. Click on the 'Create Cluster' option to create a cluster with 3 `n1-standard-2` nodes and kubernetes master version as `1.11.7-gke.12` or above.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/amsaha/KFLab/master/tf-mnist/pictures/gke_machine_type.png" height="450" title="GKE machine type">
+</p>
+
 
 4. **gcloud**
 
