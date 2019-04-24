@@ -1,4 +1,5 @@
 # Table of Contents
+- [What you will learn](#what-you-will-learn)
 - [Overview of the application](#overview-of-the-application)
     - [Overall Structure](#overall-structure)
     - [GKE Specific Structure](#gke-specific-structure)
@@ -10,7 +11,7 @@
     - [Using a web application](#using-a-web-application)
 - [Extras](#extras)
 
-# Scope of this application
+# What you will learn
 Once you do complete this application you will have had hands on experience
 on the following:
 
