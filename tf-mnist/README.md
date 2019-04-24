@@ -170,7 +170,8 @@ If there is any rate limit error from github, please follow the instructions at:
        # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
        kubectl get pods -n kubeflow
        ```
-
+ 	Wait till the TF worker pod status changes to "Completed".
+	
 3. Start TF serving on the trained results
 
        ```
