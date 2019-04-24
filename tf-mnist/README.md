@@ -10,6 +10,17 @@
     - [Using a web application](#using-a-web-application)
 - [Extras](#extras)
 
+# Scope of this application
+Once you do complete this application you will have had hands on experience
+on the following:
+
+* How to setup a [Kubernetes](https://kubernetes.io/) cluster on [Google Cloud Platform (GCP)](https://cloud.google.com/).
+* How to install [Kubeflow](https://www.kubeflow.org/) on a Kubernetes cluster.
+* How to train a [TensorFlow](https://www.tensorflow.org/) model on the [MNIST](http://yann.lecun.com/exdb/mnist/index.html) data.
+* How to serve the trained model using Kubeflow.
+* How to develop a simple browser based application that can use the model to
+  recognize handwritten digits.
+
 # Overview of the application
 This tutorial contains instructions to build an **end to end kubeflow app** on a
 Kubernetes cluster running on Google Kubernetes Engine (GKE) with minimal prerequisites.
