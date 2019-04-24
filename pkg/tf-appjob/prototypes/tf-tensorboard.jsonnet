@@ -73,8 +73,8 @@ local deployment = {
                   ],
                   "volumeMounts": [
                      {
-                        "mountPath": /mnt,
-			"name": nfs
+                        "mountPath": "/mnt",
+			"name": "nfs"
                      }
                   ],
                }
