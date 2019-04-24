@@ -73,6 +73,7 @@ Please refer to [MiniKF Readme](https://github.com/ciscoAI/KFLab/blob/master/tf-
 1. Create a [Google Cloud Account](https://console.cloud.google.com/)
 
 2. Navigate in the Google Cloud Console to Google Kubernetes Engine and create a cluster.
+![Create a cluster in GKE](pictures/gke_cluster_create.png?raw=true "Create a cluster in GKE")
 
 3. Click on the 'Create Cluster' option to create a cluster with 3 `n1-standard-2` nodes and kubernetes master version as `1.11.7-gke.12` or above.
 
