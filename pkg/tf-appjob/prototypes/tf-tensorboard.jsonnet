@@ -71,7 +71,21 @@ local deployment = {
                         "containerPort": 6006
                      }
                   ],
+                  "volumeMounts": [
+                     {
+                        "mountPath": /mnt,
+						            "name": nfs
+                     }
+                  ],
                }
+            ],
+			      "volumes": [
+                    {
+                        "name": "nfs",
+                        "persistentVolumeClaim": {
+                        "claimName": "nfs"
+                    }
+                }
             ]
          }
       }
