@@ -39,9 +39,21 @@ kubectl get pods -n ${NAMESPACE}
 #CLUSTER_IP=`hostname -I | awk '{print $1}'`
 #echo "Visit your webapp at ${CLUSTER_IP}:${NODE_PORT}"
 
-# sleep till the svc comes up
-echo "Wait till the client svc comes up:"
-sleep 30
+# Wait till the svc comes up
+timeout="1000"
+start_time=`date +%s`
+CLUSTER_IP=""
+while [ -z "$CLUSTER_IP" ]; do
+  CLUSTER_IP=$(kubectl get svc -n $NAMESPACE tf-mnist-client -o jsonpath='{.spec.clusterIP}' 2> /dev/null)
+  current_time=`date +%s`
+  elapsed_time=$(expr $current_time + 1 - $start_time)
+  if [[ $elapsed_time -gt $timeout ]];then
+    echo "timeout waiting for service to launch"
+    exit 1
+  fi
+  sleep 5
+done
+echo "TF MNIST client service created."
 
 #port forward mnist client port to a local port
 kubectl -n ${NAMESPACE} port-forward svc/tf-mnist-client ${WEBAPP_PORT}:80 
