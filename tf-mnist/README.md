@@ -151,7 +151,7 @@ kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=
    Check if kubectl  is configured properly by accessing the cluster Info of your kubernetes cluster
 
 ```console
-        $ kubectl cluster-info
+$ kubectl cluster-info
 ```
 
 2. **ksonnet**
