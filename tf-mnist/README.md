@@ -105,7 +105,9 @@ connect to GKE cluster")
 7. `kubectl config current-context` should return your cluster name which you created.
 
 8. Create a cluster role for your user by running:
-`kubectl create clusterrolebinding any-human-readable-name --clusterrole=cluster-admin --user=<your@email.com>`
+```console
+kubectl create clusterrolebinding any-human-readable-name --clusterrole=cluster-admin --user=<your@email.com>`
+```
 
 ### Service Account Users
 
@@ -117,7 +119,7 @@ connect to GKE cluster")
    your macbooks.
 4. Activate service account (```service-acc-name``` and ```json-file-name``` will be
    provided)
-```bash
+```console
 gcloud auth activate-service-account <service-acc-name> --key-file=<json-file-name> --project=ml-bootcamp-2018
 
 Example (uses team-blr-1):
@@ -126,7 +128,7 @@ gcloud auth activate-service-account team-blr-1@ml-bootcamp-2018.iam.gserviceacc
 ```
 5. Get kubeconfig for your cluster (```cluster-name``` and ```zone-name``` will
    be provided)
-```bash
+```console
 gcloud container clusters get-credentials <cluster-name> --zone <zone-name>
 
 Example (uses team-blr-1):
@@ -137,7 +139,7 @@ gcloud container clusters get-credentials team-blr-1 --zone asia-south1-c
 ```console
 kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=<service-acc-name>
 
-Example (uses team-blr-1):
+# Example (uses team-blr-1):
 kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=team-blr-1@ml-bootcamp-2018.iam.gserviceaccount.com
 ```
 
@@ -148,14 +150,18 @@ kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=
    Install (kubectl)[https://kubernetes.io/docs/tasks/tools/install-kubectl/] if not present already.
    Check if kubectl  is configured properly by accessing the cluster Info of your kubernetes cluster
 
+```console
         $ kubectl cluster-info
+```
 
 2. **ksonnet**
 
     Install [ksonnet](https://ksonnet.io/get-started/).
     Check ksonnet version
 
+```console
         $ ks version
+```
 
     Ksonnet version must be greater than or equal to **0.13.1**.
     Upgrade to the latest if it is an older version.
@@ -171,11 +177,13 @@ If above commands succeeds, **you are good to go!**
 
 # Installation
 
-        ./install.bash
+```console
+    ./install.bash
 
 
-        # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
-        kubectl get pods -n kubeflow
+    # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
+    kubectl get pods -n kubeflow
+```
 
 If you see any rate limit error from github, please check that you have followed
 the instruction at:
@@ -201,13 +209,16 @@ the instruction at:
 
 2. Run the training job setup script
 
+```console
 	   ./train.bash
        # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
        kubectl get pods -n kubeflow
-
+```
 3. Start TF serving on the trained results
 
+```console
        ./serve.bash
+```
 
 # Model Testing
 
@@ -221,11 +232,14 @@ service for the local clients.
 
 Port forward to access the serving port locally
 
+```console
     ./portf.bash
+```
 
 
 Run a sample client code to predict images(See mnist-client.py)
 
+```console
     virtualenv --system-site-packages env
     source ./env/bin/activate
     easy_install -U pip
@@ -235,6 +249,7 @@ Run a sample client code to predict images(See mnist-client.py)
     pip install Pillow
 
     TF_MNIST_IMAGE_PATH=data/7.png python mnist_client.py
+```
 
 You should see the following result
 
@@ -247,11 +262,14 @@ Now try a different image in `data` directory :)
 
 This is ideal if you would like to create a test web application exposed by a loadbalancer.
 
+```console
     MNIST_SERVING_IP=`kubectl -n ${NAMESPACE} get svc/mnist --output=jsonpath={.spec.clusterIP}`
     echo "MNIST_SERVING_IP is ${MNIST_SERVING_IP}"
+```
 
 Create image using Dockerfile in the webapp folder and upload to DockerHub
 
+```console
     CLIENT_IMAGE=${DOCKER_BASE_URL}/mnist-client
     docker build . --no-cache  -f Dockerfile -t ${CLIENT_IMAGE}
     docker push ${CLIENT_IMAGE}
@@ -263,10 +281,13 @@ Create image using Dockerfile in the webapp folder and upload to DockerHub
 
     #Ensure that all pods are running in the namespace set in variables.bash.
     kubectl get pods -n ${NAMESPACE}
+```
 
 Now get the loadbalancer IP of the tf-mnist-client service
 
+```console
     kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+```
 
 Open browser and see app at http://LoadBalancerIP. You should see something as
 follows:
@@ -277,9 +298,9 @@ follows:
 
 A simple way to expose your web application is by port forwarding the mnist client service to your laptop.
 
- ```bash
+```console
    ./webapp.bash
- ```
+```
 
 After running this script, open browser and see app at http://127.0.0.1:9001
 
@@ -288,9 +309,9 @@ After running this script, open browser and see app at http://127.0.0.1:9001
 Another way to expose your web application on the Internet is NodePort. Define
 variables in variables.bash and run the following script:
 
- ```bash
+```console
    ./webapp.bash
- ```
+```
 
 After running this script, you will get the IP adress of your web application.
 Open browser and see app at http://IP_ADRESS:NodePort
@@ -321,8 +342,8 @@ If you want to change the training image, set `image` to your new training
 image. See the [prototype
 generation](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/train.bash#L21)
 
-```bash
-        ks param set ${JOB} image ${IMAGE}
+```console
+    ks param set ${JOB} image ${IMAGE}
 ```
 
 If you would like to retrain the model(with a new image or not), you can delete
@@ -330,15 +351,21 @@ the current training job and create a new one. See the
 [training](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/train.bash#L28)
 step.
 
-         ks delete ${KF_ENV} -c ${JOB}
-         ks apply ${KF_ENV} -c ${JOB}
+```console
+     ks delete ${KF_ENV} -c ${JOB}
+     ks apply ${KF_ENV} -c ${JOB}
+```
 ## Clean up pods
 
+```console
 	./cleanup.bash
+```
 
-   Forcefully terminate pods using:
+Forcefully terminate pods using:
 
+```console
    	$ kubectl delete pod <pod_name> --force -n kubeflow --grace-period=0
+```
 
 ### Note
 
