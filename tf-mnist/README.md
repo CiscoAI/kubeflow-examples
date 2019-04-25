@@ -198,10 +198,12 @@ the instruction at:
    create one at [https://hub.docker.com/](https://hub.docker.com/), upload your image there, and do the following
    (replace <username> and <container> with appropriate values).
 
-       DOCKER_BASE_URL=docker.io/<username>
-       IMAGE=${DOCKER_BASE_URL}/<image>
-       docker build . --no-cache  -f Dockerfile -t ${IMAGE}
-       docker push ${IMAGE}
+```console
+   DOCKER_BASE_URL=docker.io/<username>
+   IMAGE=${DOCKER_BASE_URL}/<image>
+   docker build . --no-cache  -f Dockerfile -t ${IMAGE}
+   docker push ${IMAGE}
+```
 
 > **NOTE.** Images kept in gcr.io might make things faster since it keeps images within GKE, thus avoiding delays of accessing the image
 > from a remote container registry.
