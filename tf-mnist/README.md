@@ -277,7 +277,7 @@ follows:
 
 A simple way to expose your web application is by port forwarding the mnist client service to your laptop.
 
- ```
+ ```bash
    ./webapp.bash
  ```
 
@@ -288,7 +288,7 @@ After running this script, open browser and see app at http://127.0.0.1:9001
 Another way to expose your web application on the Internet is NodePort. Define
 variables in variables.bash and run the following script:
 
- ```
+ ```bash
    ./webapp.bash
  ```
 
