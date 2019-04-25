@@ -151,15 +151,15 @@ kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=
 
         $ ks version
 
-    Ksonnet version must be greater than or equal to **0.13.1**. Upgrade to the latest if it is an older version
+    Ksonnet version must be greater than or equal to **0.13.1**.
+    Upgrade to the latest if it is an older version.
 
 3. Create a [github account](https://github.com) to be able to clone this repository.
 
 4. Install [virtualenv](https://virtualenv.pypa.io/en/latest/].
-This is *not mandatory* but is needed for the [shell based
-   client](#using-a-local-python-client)
+   This is *not mandatory* but is needed for the [shell based client](#using-a-local-python-client).
 
-If above commands succeeds, you are good to go !
+If above commands succeeds, **you are good to go!**
 
 # Installation
 
