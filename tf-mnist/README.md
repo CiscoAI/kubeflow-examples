@@ -117,7 +117,7 @@ connect to GKE cluster")
    your macbooks.
 4. Activate service account (```service-acc-name``` and ```json-file-name``` will be
    provided)
-```
+```bash
 gcloud auth activate-service-account <service-acc-name> --key-file=<json-file-name> --project=ml-bootcamp-2018
 
 Example (uses team-blr-1):
@@ -126,7 +126,7 @@ gcloud auth activate-service-account team-blr-1@ml-bootcamp-2018.iam.gserviceacc
 ```
 5. Get kubeconfig for your cluster (```cluster-name``` and ```zone-name``` will
    be provided)
-```
+```bash
 gcloud container clusters get-credentials <cluster-name> --zone <zone-name>
 
 Example (uses team-blr-1):
@@ -134,7 +134,7 @@ gcloud container clusters get-credentials team-blr-1 --zone asia-south1-c
 ```
 6. Enable admin cluster role binding (```your-user-cluster-admin-binding``` was
    retrieved in the previous step) (only 1 team member should run the below command)
-```
+```bash
 kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=<service-acc-name>
 
 Example (uses team-blr-1):
@@ -321,7 +321,9 @@ If you want to change the training image, set `image` to your new training
 image. See the [prototype
 generation](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/train.bash#L21)
 
+```bash
         ks param set ${JOB} image ${IMAGE}
+```
 
 If you would like to retrain the model(with a new image or not), you can delete
 the current training job and create a new one. See the
