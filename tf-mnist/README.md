@@ -68,6 +68,9 @@ Please refer to [MiniKF Readme](https://github.com/ciscoAI/KFLab/blob/master/tf-
 
 ## Google Kubernetes Engine Prerequisites
 
+You will need either your personal account or a google service account.
+Accordingly, the relevant steps have to be followed.
+
 ### Google Cloud Account Users
 
 1. Create a [Google Cloud Account](https://console.cloud.google.com/)
@@ -77,28 +80,31 @@ Please refer to [MiniKF Readme](https://github.com/ciscoAI/KFLab/blob/master/tf-
   <img src="https://raw.githubusercontent.com/amsaha/KFLab/master/tf-mnist/pictures/gke_cluster_create.png" height="450" title="Create a GKE cluster">
 </p>
 
-3. Click on the 'Create Cluster' option to create a cluster with 3 `n1-standard-2` nodes and kubernetes master version as `1.11.7-gke.12` or above.
+3. Click on the 'Create Cluster' option to create a cluster with 3 `n1-standard-2` (2 vCPU, 7.5GB memory) nodes
+and kubernetes master version as `1.11.7-gke.12` or above.
 <p align="center">
   <img src="https://raw.githubusercontent.com/amsaha/KFLab/master/tf-mnist/pictures/gke_machine_type.png" height="450" title="GKE machine type">
 </p>
 
 
-4. **gcloud**
+4. Install `gcloud` SDK on your laptop.
 
-    [Install gcloud SDK](https://cloud.google.com/deployment-manager/docs/step-by-step-guide/installation-and-setup) by skipping to the 'Install Cloud SDK' section given in the hyperlink.
+    [Install gcloud SDK](https://cloud.google.com/deployment-manager/docs/step-by-step-guide/installation-and-setup) by skipping to the **Install Cloud SDK** section of the page.
 
 5. Execute `gcloud auth login` command on your shell to authenticate your gcloud account.
 
-6. Press the 'connect' button against your created cluster, then copy the command it provides you and execute it on your shell.
+6. Press the 'connect' button against your created cluster,
+then copy the command it provides you and execute it on your shell.
 
 7. `kubectl config current-context` should return your cluster name which you created.
 
-8. Create a cluster role for your user by running:  
-`kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=<your@email.com>`
+8. Create a cluster role for your user by running:
+`kubectl create clusterrolebinding any-human-readable-name --clusterrole=cluster-admin --user=<your@email.com>`
 
 ### Service Account Users
 
-1. Each team/person will be given a service account.
+1. Each team/person will be given a service account, which will have to be setup
+   by someone else. Usually,the instructors will be able to provide this.
 2. Install [gcloud](https://cloud.google.com/sdk/docs/quickstart-macos) on your
    macbooks.
 3. Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) on
@@ -133,14 +139,14 @@ kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=
 
 1. **kubectl cli**
 
-   Install (kubectl)[https://kubernetes.io/docs/tasks/tools/install-kubectl/] if not present already.  
+   Install (kubectl)[https://kubernetes.io/docs/tasks/tools/install-kubectl/] if not present already.
    Check if kubectl  is configured properly by accessing the cluster Info of your kubernetes cluster
 
         $ kubectl cluster-info
 
 2. **ksonnet**
 
-    Install [ksonnet](https://ksonnet.io/get-started/).  
+    Install [ksonnet](https://ksonnet.io/get-started/).
     Check ksonnet version
 
         $ ks version
@@ -148,6 +154,10 @@ kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=
     Ksonnet version must be greater than or equal to **0.13.1**. Upgrade to the latest if it is an older version
 
 3. Create a [github account](https://github.com) to be able to clone this repository.
+
+4. Install [virtualenv](https://virtualenv.pypa.io/en/latest/].
+This is *not mandatory* but is needed for the [shell based
+   client](#using-a-local-python-client)
 
 If above commands succeeds, you are good to go !
 
@@ -159,8 +169,9 @@ If above commands succeeds, you are good to go !
         # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
         kubectl get pods -n kubeflow
 
-If there is any rate limit error from github, please follow the instructions at:
-[Github Token Setup](https://github.com/ksonnet/ksonnet/blob/master/docs/troubleshooting.md#github-rate-limiting-errors)
+If you see any rate limit error from github, please check that you have followed
+the instruction at:
+[Github Token Setup](https://github.com/ksonnet/ksonnet/blob/master/docs/troubleshooting.md#github-rate-limiting-errors). You should have already done this in the [Prerequsites](#prerequisites).
 
 
 # Setup
