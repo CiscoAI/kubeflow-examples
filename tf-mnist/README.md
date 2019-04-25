@@ -159,7 +159,7 @@ kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=
     Install [ksonnet](https://ksonnet.io/get-started/).
     Check ksonnet version
 
-```console
+```shell
    $ ks version
 ```
 
