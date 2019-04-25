@@ -360,13 +360,13 @@ step.
 ## Clean up pods
 
 ```console
-	./cleanup.bash
+    ./cleanup.bash
 ```
 
 Forcefully terminate pods using:
 
 ```console
-   	$ kubectl delete pod <pod_name> --force -n kubeflow --grace-period=0
+    $ kubectl delete pod <pod_name> --force -n kubeflow --grace-period=0
 ```
 
 ### Note
