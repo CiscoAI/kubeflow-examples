@@ -94,7 +94,13 @@ and kubernetes master version as `1.11.7-gke.12` or above.
 5. Execute `gcloud auth login` command on your shell to authenticate your gcloud account.
 
 6. Press the 'connect' button against your created cluster,
+[Connect to cluster](pictures/gke_cluster_connect.png?raw=true "Connect to GKE cluster")
+
 then copy the command it provides you and execute it on your shell.
+[Shell command](pictures/gke_shell_connect.png?raw=true "Shell command to
+connect to GKE cluster")
+
+
 
 7. `kubectl config current-context` should return your cluster name which you created.
 
