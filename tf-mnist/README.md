@@ -154,7 +154,9 @@ kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=
     Ksonnet version must be greater than or equal to **0.13.1**.
     Upgrade to the latest if it is an older version.
 
-3. Create a [github account](https://github.com) to be able to clone this repository.
+3. Create a [github account](https://github.com) to be able to clone **this** repository. The easiest
+way to clone is to use the https git url as opposed to the ssh url because for
+the latter, the ssh keys have to be setup in your github account.
 
 4. Install [virtualenv](https://virtualenv.pypa.io/en/latest/].
    This is *not mandatory* but is needed for the [shell based client](#using-a-local-python-client).
