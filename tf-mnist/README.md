@@ -184,18 +184,16 @@ the instruction at:
 
 # Setup
 
-1.  (**Optional**) If you want to use a custom image for training, create the training Image and upload to DockerHub. Else, skip this step to use the already existing image (`gcr.io/cpsg-ai-demo/tf-mnist-demo:v1`).
+1.  **[Optional]** If you want to use a custom image for training, create the training Image and upload to DockerHub. Else, skip this step to use the already existing image (`gcr.io/cpsg-ai-demo/tf-mnist-demo:v1`).
 
    Point `DOCKER_BASE_URL` to your DockerHub account. Point `IMAGE` to your training image. If you don't have a DockerHub account,
    create one at [https://hub.docker.com/](https://hub.docker.com/), upload your image there, and do the following
    (replace <username> and <container> with appropriate values).
 
-       ```
        DOCKER_BASE_URL=docker.io/<username>
        IMAGE=${DOCKER_BASE_URL}/<image>
        docker build . --no-cache  -f Dockerfile -t ${IMAGE}
        docker push ${IMAGE}
-       ```
 
 > **NOTE.** Images kept in gcr.io might make things faster since it keeps images within GKE, thus avoiding delays of accessing the image
 > from a remote container registry.
@@ -203,17 +201,13 @@ the instruction at:
 
 2. Run the training job setup script
 
-       ```
 	   ./train.bash
        # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
        kubectl get pods -n kubeflow
-       ```
 
 3. Start TF serving on the trained results
 
-       ```
        ./serve.bash
-       ```
 
 # Model Testing
 
