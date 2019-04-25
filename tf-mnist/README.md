@@ -164,7 +164,7 @@ kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=
 way to clone is to use the https git url as opposed to the ssh url because for
 the latter, the ssh keys have to be setup in your github account.
 
-4. Install [virtualenv](https://virtualenv.pypa.io/en/latest/].
+4. Install [virtualenv](https://virtualenv.pypa.io/en/latest/).
    This is *not mandatory* but is needed for the [shell based client](#using-a-local-python-client).
 
 If above commands succeeds, **you are good to go!**
