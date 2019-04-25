@@ -268,11 +268,14 @@ Now get the loadbalancer IP of the tf-mnist-client service
 
     kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
 
-Open browser and see app at http://LoadBalancerIP
+Open browser and see app at http://LoadBalancerIP. You should see something as
+follows:
+![Web App](pictures/webapp.png?raw=true "Web app for MNIST")
+
 
 ### Port Forwarding
 
-A simple way to expose your web application is by port forwarding the mnist client service to your laptop. 
+A simple way to expose your web application is by port forwarding the mnist client service to your laptop.
 
  ```
    ./webapp.bash
