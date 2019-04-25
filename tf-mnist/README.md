@@ -159,7 +159,7 @@ kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=
     Install [ksonnet](https://ksonnet.io/get-started/).
     Check ksonnet version
 
-```shell
+```console
    $ ks version
 ```
 
@@ -210,14 +210,14 @@ the instruction at:
 2. Run the training job setup script
 
 ```console
-	   ./train.bash
-       # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
-       kubectl get pods -n kubeflow
+    ./train.bash
+    # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
+    kubectl get pods -n kubeflow
 ```
 3. Start TF serving on the trained results
 
 ```console
-       ./serve.bash
+    ./serve.bash
 ```
 
 # Model Testing
