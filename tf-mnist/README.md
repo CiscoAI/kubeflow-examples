@@ -12,15 +12,14 @@
 - [Extras](#extras)
 
 # What you will learn
-Once you do complete this application you will have had hands on experience
-on the following:
+Doing this application will give you hands on experience on the following:
 
 * How to setup a [Kubernetes](https://kubernetes.io/) cluster on [Google Cloud Platform (GCP)](https://cloud.google.com/).
 * How to install [Kubeflow](https://www.kubeflow.org/) on a Kubernetes cluster.
 * How to train a [TensorFlow](https://www.tensorflow.org/) model on the [MNIST](http://yann.lecun.com/exdb/mnist/index.html) data.
-* How to serve the trained model using Kubeflow.
-* How to develop a simple browser based application that can use the model to
-  recognize handwritten digits.
+* How to export the trained TensorFlow model and serve the model using Kubeflow.
+* How to test the model using a shell based Python client.
+* How to test the model using a simple browser based application.
 
 # Overview of the application
 This tutorial contains instructions to build an **end to end kubeflow app** on a
@@ -99,8 +98,6 @@ and kubernetes master version as `1.11.7-gke.12` or above.
 then copy the command it provides you and execute it on your shell.
 ![Shell command](pictures/gke_shell_connect.png?raw=true "Shell command to
 connect to GKE cluster")
-
-
 
 7. `kubectl config current-context` should return your cluster name which you created.
 
