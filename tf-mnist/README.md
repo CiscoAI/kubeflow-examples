@@ -1,16 +1,16 @@
 # Table of Contents
-- [What you will learn](#what-you-will-learn)
-- [Overview of the application](#overview-of-the-application)
-    - [Overall Structure](#overall-structure)
-    - [GKE Specific Structure](#gke-specific-structure)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Setup](#setup)
-- [Model Testing](#model-testing)
-    - [Using a local Python client](#using-a-local-python-client)
-    - [Using a web application](#using-a-web-application)
-- [Completion Criteria](#completion-criteria)
-- [Extras](#extras)
+1. [What you will learn](#what-you-will-learn)
+2. [Overview of the application](#overview-of-the-application)
+    a) [Overall Structure](#overall-structure)
+    b) [GKE Specific Structure](#gke-specific-structure)
+3. [Prerequisites](#prerequisites)
+4. [Installation](#installation)
+5. [Setup](#setup)
+6. [Model Testing](#model-testing)
+    1. [Using a local Python client](#using-a-local-python-client)
+    2. [Using a web application](#using-a-web-application)
+7. [Completion Criteria](#completion-criteria)
+8. [Extras](#extras)
 
 # What you will learn
 Deconstructing the MNIST application will give you hands on experience on the following:
