@@ -1,8 +1,8 @@
 # Table of Contents
 1. [What you will learn](#what-you-will-learn)
 2. [Overview of the application](#overview-of-the-application)
-    a) [Overall Structure](#overall-structure)
-    b) [GKE Specific Structure](#gke-specific-structure)
+    1. [Overall Structure](#overall-structure)
+    2. [GKE Specific Structure](#gke-specific-structure)
 3. [Prerequisites](#prerequisites)
 4. [Installation](#installation)
 5. [Setup](#setup)
