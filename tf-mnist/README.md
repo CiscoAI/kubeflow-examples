@@ -223,7 +223,7 @@ the instruction at:
     ./serve.bash
 ```
 
-# Model Testing
+# Model Testing ![100%](pictures/progress-overall-83.png?raw=true "83% done")
 
 The model can be tested using a local python client or via web application
 
