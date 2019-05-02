@@ -9,7 +9,7 @@
 - [Model Testing](#model-testing)
     - [Using a local Python client](#using-a-local-python-client)
     - [Using a web application](#using-a-web-application)
-- [Completion Criteria] (#completion-criteria)
+- [Completion Criteria](#completion-criteria)
 - [Extras](#extras)
 
 # What you will learn
@@ -322,7 +322,7 @@ Open browser and see app at http://IP_ADRESS:NodePort
 # Completion Criteria
 
 This exercise can be considered complete once the application has been verified
-by[using a python client](#using-a-local-python-client) AND
+by [using a python client](#using-a-local-python-client) AND
 by [using a web browser](#using-a-web-application). In the below image,
 if the "Inferred Digit"
 correctly identifies the submitted image, the application is working as
