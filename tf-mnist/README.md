@@ -1,6 +1,6 @@
 # Table of Contents
-1. [What you will learn](#what-you-will-learn)
-2. [Overview of the application](#overview-of-the-application)
+1. [What you will Learn](#what-you-will-learn)
+2. [Overview of the Application](#overview-of-the-application)
     1. [Overall Structure](#overall-structure)
     2. [GKE Specific Structure](#gke-specific-structure)
 3. [Prerequisites](#prerequisites)
@@ -12,7 +12,7 @@
 7. [Completion Criteria](#completion-criteria)
 8. [Extras](#extras)
 
-# What you will learn
+# What you will Learn
 Deconstructing the MNIST application will give you hands on experience on the following:
 
 * How to setup a [Kubernetes](https://kubernetes.io/) cluster on [Google Cloud Platform (GCP)](https://cloud.google.com/).
@@ -24,7 +24,7 @@ Deconstructing the MNIST application will give you hands on experience on the fo
 
 Please check the [Completion Criteria](#completion-criteria).
 
-# Overview of the application
+# Overview of the Application
 This tutorial contains instructions to build an **end to end kubeflow app** on a
 Kubernetes cluster running on Google Kubernetes Engine (GKE) with minimal prerequisites.
 *It should work on any other K8s cluster as well.*
@@ -323,15 +323,13 @@ Open browser and see app at http://IP_ADRESS:NodePort
 
 # Completion Criteria
 
-In case you are doing this as part of a bootcamp or training program,
-this exercise can be considered complete once the application has been verified
+This exercise can be considered complete once the application has been verified
 by [using a python client](#using-a-local-python-client) AND
 by [using a web browser](#using-a-web-application). In the below image,
 if the "Inferred Digit"
 correctly identifies the submitted image, as shown in the image below, the application is working as
 expected.
 ![Web App](pictures/webapp.png?raw=true "Web app for MNIST")
-
 
 
 # Extras
