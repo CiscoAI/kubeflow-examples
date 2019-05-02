@@ -117,29 +117,30 @@ kubectl create clusterrolebinding any-human-readable-name --clusterrole=cluster-
    macbooks.
 3. Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) on
    your macbooks.
-4. Activate service account (```service-acc-name``` and ```json-file-name``` will be
-   provided)
-```console
+4. Activate service account (`service-acc-name` and `json-file-name` will be provided)
+```
 gcloud auth activate-service-account <service-acc-name> --key-file=<json-file-name> --project=ml-bootcamp-2018
-
+```
 Example (uses team-blr-1):
+```
 gcloud auth activate-service-account team-blr-1@ml-bootcamp-2018.iam.gserviceaccount.com --key-file=ml-bootcamp-2018-409e6b4a7257.json --project=ml-bootcamp-2018
-
 ```
 5. Get kubeconfig for your cluster (```cluster-name``` and ```zone-name``` will
    be provided)
 ```console
 gcloud container clusters get-credentials <cluster-name> --zone <zone-name>
-
+```
 Example (uses team-blr-1):
+```
 gcloud container clusters get-credentials team-blr-1 --zone asia-south1-c
 ```
-6. Enable admin cluster role binding (```your-user-cluster-admin-binding``` was
-   retrieved in the previous step) (only 1 team member should run the below command)
+6. Enable admin cluster role binding (`your-user-cluster-admin-binding` was retrieved in the previous step)  
+*Note*: Only 1 team member should run the below command
 ```console
 kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=<service-acc-name>
-
-# Example (uses team-blr-1):
+```
+Example (uses team-blr-1):
+```
 kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=team-blr-1@ml-bootcamp-2018.iam.gserviceaccount.com
 ```
 
@@ -217,7 +218,11 @@ the instruction at:
     # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
     kubectl get pods -n kubeflow
 ```
- 	Wait till the TF worker pod status changes to "Completed".
+Wait till the TF worker pod status changes to "Completed".
+Check training pod's logs using the command:
+```
+    kubectl logs tf-mnistjob-worker-0 -n kubeflow
+```  
 
 3. Start TF serving on the trained results
 
