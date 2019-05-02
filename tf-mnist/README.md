@@ -21,6 +21,7 @@ Deconstructing the MNIST application will give you hands on experience on the fo
 * How to export the trained TensorFlow model and serve the model using Kubeflow.
 * How to test the model using a shell based Python client.
 * How to test the model using a simple browser based application.
+
 Please check the [Completion Criteria](#completion-criteria).
 
 # Overview of the application
