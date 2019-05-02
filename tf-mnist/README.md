@@ -321,7 +321,8 @@ Open browser and see app at http://IP_ADRESS:NodePort
 
 # Completion Criteria
 
-This exercise can be considered complete once the application has been verified
+In case you are doing this as part of a bootcamp or training program,
+this exercise can be considered complete once the application has been verified
 by [using a python client](#using-a-local-python-client) AND
 by [using a web browser](#using-a-web-application). In the below image,
 if the "Inferred Digit"
