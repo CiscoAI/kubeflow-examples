@@ -319,7 +319,7 @@ variables in variables.bash and run the following script:
 After running this script, you will get the IP adress of your web application.
 Open browser and see app at http://IP_ADRESS:NodePort
 
-# Completion Criteria
+# Completion Criteria ![100%](pictures/progress-overall-100.png?raw=true "100% done")
 
 In case you are doing this as part of a bootcamp or training program,
 this exercise can be considered complete once the application has been verified
