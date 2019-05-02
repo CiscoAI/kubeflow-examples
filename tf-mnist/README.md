@@ -328,7 +328,7 @@ this exercise can be considered complete once the application has been verified
 by [using a python client](#using-a-local-python-client) AND
 by [using a web browser](#using-a-web-application). In the below image,
 if the "Inferred Digit"
-correctly identifies the submitted image, the application is working as
+correctly identifies the submitted image, as shown in the image below, the application is working as
 expected.
 ![Web App](pictures/webapp.png?raw=true "Web app for MNIST")
 
