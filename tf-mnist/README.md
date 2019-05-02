@@ -9,10 +9,11 @@
 - [Model Testing](#model-testing)
     - [Using a local Python client](#using-a-local-python-client)
     - [Using a web application](#using-a-web-application)
+- [Completion Criteria] (#completion-criteria)
 - [Extras](#extras)
 
 # What you will learn
-Doing this application will give you hands on experience on the following:
+Deconstructing the MNIST application will give you hands on experience on the following:
 
 * How to setup a [Kubernetes](https://kubernetes.io/) cluster on [Google Cloud Platform (GCP)](https://cloud.google.com/).
 * How to install [Kubeflow](https://www.kubeflow.org/) on a Kubernetes cluster.
@@ -317,6 +318,18 @@ variables in variables.bash and run the following script:
 
 After running this script, you will get the IP adress of your web application.
 Open browser and see app at http://IP_ADRESS:NodePort
+
+# Completion Criteria
+
+This exercise can be considered complete once the application has been verified
+by[using a python client](#using-a-local-python-client) AND
+by [using a web browser](#using-a-web-application). In the below image,
+if the "Inferred Digit"
+correctly identifies the submitted image, the application is working as
+expected.
+![Web App](pictures/webapp.png?raw=true "Web app for MNIST")
+
+
 
 # Extras
 
