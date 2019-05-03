@@ -330,7 +330,8 @@ Open browser and see app at http://IP_ADRESS:NodePort
 
 This exercise can be considered complete once the application has been verified
 by [using a python client](#using-a-local-python-client) AND
-by [using a web browser](#using-a-web-application). In the below image,
+by using the [Port Forwarding](#port-forwarding) method for verifying
+[using a web browser](#using-a-web-application). In the below image,
 if the "Inferred Digit"
 correctly identifies the submitted image, as shown in the image below, the application is working as
 expected.
