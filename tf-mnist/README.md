@@ -268,6 +268,35 @@ You should see the following result
 Now try a different image in `data` directory :)
 
 ## Using a web application
+
+There are multiple ways of using a web based application to test the model
+serving.
+
+
+### Port Forwarding
+
+A simple way to expose your web application is by port forwarding the mnist client service to your laptop.
+
+```console
+   ./webapp.bash
+```
+
+After running this script, open browser and see app at http://127.0.0.1:9001
+You should see something as follows:
+![Web App](pictures/webapp.png?raw=true "Web app for MNIST")
+
+### NodePort
+
+Another way to expose your web application on the Internet is NodePort. Define
+variables in variables.bash and run the following script:
+
+```console
+   ./webapp.bash
+```
+
+After running this script, you will get the IP adress of your web application.
+Open browser and see app at http://IP_ADRESS:NodePort
+
 ### LoadBalancer
 
 This is ideal if you would like to create a test web application exposed by a loadbalancer.
@@ -299,32 +328,7 @@ Now get the loadbalancer IP of the tf-mnist-client service
     kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
 ```
 
-Open browser and see app at http://LoadBalancerIP. You should see something as
-follows:
-![Web App](pictures/webapp.png?raw=true "Web app for MNIST")
-
-
-### Port Forwarding
-
-A simple way to expose your web application is by port forwarding the mnist client service to your laptop.
-
-```console
-   ./webapp.bash
-```
-
-After running this script, open browser and see app at http://127.0.0.1:9001
-
-### NodePort
-
-Another way to expose your web application on the Internet is NodePort. Define
-variables in variables.bash and run the following script:
-
-```console
-   ./webapp.bash
-```
-
-After running this script, you will get the IP adress of your web application.
-Open browser and see app at http://IP_ADRESS:NodePort
+Open browser and see app at http://LoadBalancerIP. 
 
 # Completion Criteria
 
