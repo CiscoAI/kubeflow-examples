@@ -293,8 +293,8 @@ Another way to expose your web application on the Internet is NodePort.
    ./webapp.bash nodeport
 ```
 
-After running this script, you will get the IP address and portnumber of  web application.
-Open browser and see app at http://IP_ADRESS:NodePort
+After running this script, you will get the IP address and portnumber of web application.
+Open browser and see app at http://IP_ADDRESS:NodePort
 
 ### LoadBalancer
 
