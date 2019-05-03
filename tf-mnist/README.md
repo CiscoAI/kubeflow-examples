@@ -1,16 +1,30 @@
 # Table of Contents
-- [Overview of the application](#overview-of-the-application)
-    - [Overall Structure](#overall-structure)
-    - [GKE Specific Structure](#gke-specific-structure)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Setup](#setup)
-- [Model Testing](#model-testing)
-    - [Using a local Python client](#using-a-local-python-client)
-    - [Using a web application](#using-a-web-application)
-- [Extras](#extras)
+1. [What you will Learn](#what-you-will-learn)
+2. [Overview of the Application](#overview-of-the-application)
+    1. [Overall Structure](#overall-structure)
+    2. [GKE Specific Structure](#gke-specific-structure)
+3. [Prerequisites](#prerequisites)
+4. [Installation](#installation)
+5. [Setup](#setup)
+6. [Model Testing](#model-testing)
+    1. [Using a local Python client](#using-a-local-python-client)
+    2. [Using a web application](#using-a-web-application)
+7. [Completion Criteria](#completion-criteria)
+8. [Extras](#extras)
 
-# Overview of the application
+# What you will Learn
+Deconstructing the MNIST application will give you hands on experience on the following:
+
+* How to setup a [Kubernetes](https://kubernetes.io/) cluster on [Google Cloud Platform (GCP)](https://cloud.google.com/).
+* How to install [Kubeflow](https://www.kubeflow.org/) on a Kubernetes cluster.
+* How to train a [TensorFlow](https://www.tensorflow.org/) model on the [MNIST](http://yann.lecun.com/exdb/mnist/index.html) data.
+* How to export the trained TensorFlow model and serve the model using Kubeflow.
+* How to test the model using a shell based Python client.
+* How to test the model using a simple browser based application.
+
+Please check the [Completion Criteria](#completion-criteria).
+
+# Overview of the Application
 This tutorial contains instructions to build an **end to end kubeflow app** on a
 Kubernetes cluster running on Google Kubernetes Engine (GKE) with minimal prerequisites.
 *It should work on any other K8s cluster as well.*
@@ -47,52 +61,150 @@ The parameter are then stored on an `NFS` persistent volume. Finally, multiple
 logical GKE cluster where the `train` and `serve` stages run) connects with the
 `serve` stage to get a prediction of an image.
 
+## Note for Non-GKE users
+
+If there is no GKE k8s cluster available, there is still an option of trying out this example on your laptop or server.
+Please refer to [MiniKF Readme](https://github.com/ciscoAI/KFLab/blob/master/tf-mnist/minikf)
 
 # Prerequisites
 
+## Google Kubernetes Engine Prerequisites
+
+You will need either your personal account or a google service account.
+Accordingly, the relevant steps have to be followed.
+
+### Google Cloud Account Users
+
+1. Create a [Google Cloud Account](https://console.cloud.google.com/)
+
+2. Navigate in the Google Cloud Console to Google Kubernetes Engine and create a cluster.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/amsaha/KFLab/master/tf-mnist/pictures/gke_cluster_create.png" height="450" title="Create a GKE cluster">
+</p>
+
+3. Click on the 'Create Cluster' option to create a cluster with 3 `n1-standard-2` (2 vCPU, 7.5GB memory) nodes
+and kubernetes master version as `1.11.7-gke.12` or above.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/amsaha/KFLab/master/tf-mnist/pictures/gke_machine_type.png" height="450" title="GKE machine type">
+</p>
+
+
+4. Install `gcloud` SDK on your laptop.
+
+    [Install gcloud SDK](https://cloud.google.com/deployment-manager/docs/step-by-step-guide/installation-and-setup) by skipping to the **Install Cloud SDK** section of the page.
+
+5. Execute `gcloud auth login` command on your shell to authenticate your gcloud account.
+
+6. Press the 'connect' button against your created cluster,
+![Connect to cluster](pictures/gke_cluster_connect.png?raw=true "Connect to GKE cluster")
+
+then copy the command it provides you and execute it on your shell.
+![Shell command](pictures/gke_shell_connect.png?raw=true "Shell command to
+connect to GKE cluster")
+
+7. `kubectl config current-context` should return your cluster name which you created.
+
+8. Create a cluster role for your user by running:
+```console
+kubectl create clusterrolebinding any-human-readable-name --clusterrole=cluster-admin --user=<your@email.com>`
+```
+
+### Service Account Users
+
+1. Each team/person will be given a service account, which will have to be setup
+   by someone else. Usually,the instructors will be able to provide this.
+2. Install [gcloud](https://cloud.google.com/sdk/docs/quickstart-macos) on your
+   macbooks.
+3. Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) on
+   your macbooks.
+4. Activate service account (`service-acc-name` and `json-file-name` will be provided)
+```
+gcloud auth activate-service-account <service-acc-name> --key-file=<json-file-name> --project=ml-bootcamp-2018
+```
+Example (uses team-blr-1):
+```
+gcloud auth activate-service-account team-blr-1@ml-bootcamp-2018.iam.gserviceaccount.com --key-file=ml-bootcamp-2018-409e6b4a7257.json --project=ml-bootcamp-2018
+```
+5. Get kubeconfig for your cluster (```cluster-name``` and ```zone-name``` will
+   be provided)
+```console
+gcloud container clusters get-credentials <cluster-name> --zone <zone-name>
+```
+Example (uses team-blr-1):
+```
+gcloud container clusters get-credentials team-blr-1 --zone asia-south1-c
+```
+6. Enable admin cluster role binding (`your-user-cluster-admin-binding` was retrieved in the previous step)  
+*Note*: Only 1 team member should run the below command
+```console
+kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=<service-acc-name>
+```
+Example (uses team-blr-1):
+```
+kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=team-blr-1@ml-bootcamp-2018.iam.gserviceaccount.com
+```
+
+## Setup CLI tools and other accounts
+
 1. **kubectl cli**
 
+   Install (kubectl)[https://kubernetes.io/docs/tasks/tools/install-kubectl/] if not present already.
    Check if kubectl  is configured properly by accessing the cluster Info of your kubernetes cluster
 
-        $ kubectl cluster-info
+```console
+    $ kubectl cluster-info
+```
 
 2. **ksonnet**
 
+    Install [ksonnet](https://ksonnet.io/get-started/).
     Check ksonnet version
 
-        $ ks version
+```console
+   $ ks version
+```
 
-    Ksonnet version must be greater than or equal to **0.11.0**. Upgrade to the latest if it is an older version
+    Ksonnet version must be greater than or equal to **0.13.1**.
+    Upgrade to the latest if it is an older version.
 
-If above commands succeeds, you are good to go !
+3. Create a [github account](https://github.com) to be able to clone **this** repository. The easiest
+way to clone is to use the https git url as opposed to the ssh url because for
+the latter, the ssh keys have to be setup in your github account.
 
+4. Install [virtualenv](https://virtualenv.pypa.io/en/latest/).
+   This is *not mandatory* but is needed for the [shell based client](#using-a-local-python-client).
+
+If above commands succeeds, **you are good to go!**
 
 # Installation
 
-        ./install.bash
+```console
+    ./install.bash
 
 
-        # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
-        kubectl get pods -n kubeflow
+    # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
+    kubectl get pods -n kubeflow
+```
 
-If there is any rate limit error from github, please follow the instructions at:
-[Github Token Setup](https://github.com/ksonnet/ksonnet/blob/master/docs/troubleshooting.md#github-rate-limiting-errors)
+If you see any rate limit error from github, please check that you have followed
+the instruction at:
+[Github Token Setup](https://github.com/ksonnet/ksonnet/blob/master/docs/troubleshooting.md#github-rate-limiting-errors). You should have already done this in the [Prerequsites](#prerequisites).
 
 
 # Setup
 
-1.  (**Optional**) If you want to use a custom image for training, create the training Image and upload to DockerHub. Else, skip this step to use the already existing image (`gcr.io/cpsg-ai-demo/tf-mnist-demo:v1`).
+1.  **[Optional]** If you want to use a custom image for training, create the training Image and upload to DockerHub. Else, skip this step to use the already existing image (`gcr.io/cpsg-ai-demo/tf-mnist-demo:v1`).
 
    Point `DOCKER_BASE_URL` to your DockerHub account. Point `IMAGE` to your training image. If you don't have a DockerHub account,
    create one at [https://hub.docker.com/](https://hub.docker.com/), upload your image there, and do the following
    (replace <username> and <container> with appropriate values).
 
-       ```
-       DOCKER_BASE_URL=docker.io/<username>
-       IMAGE=${DOCKER_BASE_URL}/<image>
-       docker build . --no-cache  -f Dockerfile -t ${IMAGE}
-       docker push ${IMAGE}
-       ```
+```console
+   DOCKER_BASE_URL=docker.io/<username>
+   IMAGE=${DOCKER_BASE_URL}/<image>
+   docker build . --no-cache  -f Dockerfile -t ${IMAGE}
+   docker push ${IMAGE}
+```
 
 > **NOTE.** Images kept in gcr.io might make things faster since it keeps images within GKE, thus avoiding delays of accessing the image
 > from a remote container registry.
@@ -100,17 +212,23 @@ If there is any rate limit error from github, please follow the instructions at:
 
 2. Run the training job setup script
 
-       ```
-	   ./train.bash
-       # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
-       kubectl get pods -n kubeflow
-       ```
+```console
+    ./train.bash
+
+    # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
+    kubectl get pods -n kubeflow
+```
+Wait till the TF worker pod status changes to "Completed".
+Check training pod's logs using the command:
+```
+    kubectl logs tf-mnistjob-worker-0 -n kubeflow
+```  
 
 3. Start TF serving on the trained results
 
-       ```
-       ./serve.bash
-       ```
+```console
+    ./serve.bash
+```
 
 # Model Testing
 
@@ -124,11 +242,14 @@ service for the local clients.
 
 Port forward to access the serving port locally
 
+```console
     ./portf.bash
+```
 
 
 Run a sample client code to predict images(See mnist-client.py)
 
+```console
     virtualenv --system-site-packages env
     source ./env/bin/activate
     easy_install -U pip
@@ -138,6 +259,7 @@ Run a sample client code to predict images(See mnist-client.py)
     pip install Pillow
 
     TF_MNIST_IMAGE_PATH=data/7.png python mnist_client.py
+```
 
 You should see the following result
 
@@ -146,15 +268,47 @@ You should see the following result
 Now try a different image in `data` directory :)
 
 ## Using a web application
+
+There are multiple ways of using a web based application to test the model
+serving.
+
+
+### Port Forwarding
+
+A simple way to expose your web application is by port forwarding the mnist client service to your laptop.
+
+```console
+   ./webapp.bash
+```
+
+After running this script, open browser and see app at http://127.0.0.1:9001
+You should see something as follows:
+![Web App](pictures/webapp.png?raw=true "Web app for MNIST")
+
+### NodePort
+
+Another way to expose your web application on the Internet is NodePort. Define
+variables in variables.bash and run the following script:
+
+```console
+   ./webapp.bash
+```
+
+After running this script, you will get the IP adress of your web application.
+Open browser and see app at http://IP_ADRESS:NodePort
+
 ### LoadBalancer
 
 This is ideal if you would like to create a test web application exposed by a loadbalancer.
 
+```console
     MNIST_SERVING_IP=`kubectl -n ${NAMESPACE} get svc/mnist --output=jsonpath={.spec.clusterIP}`
     echo "MNIST_SERVING_IP is ${MNIST_SERVING_IP}"
+```
 
 Create image using Dockerfile in the webapp folder and upload to DockerHub
 
+```console
     CLIENT_IMAGE=${DOCKER_BASE_URL}/mnist-client
     docker build . --no-cache  -f Dockerfile -t ${CLIENT_IMAGE}
     docker push ${CLIENT_IMAGE}
@@ -166,24 +320,27 @@ Create image using Dockerfile in the webapp folder and upload to DockerHub
 
     #Ensure that all pods are running in the namespace set in variables.bash.
     kubectl get pods -n ${NAMESPACE}
+```
 
 Now get the loadbalancer IP of the tf-mnist-client service
 
+```console
     kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+```
 
-Open browser and see app at http://LoadBalancerIP
+Open browser and see app at http://LoadBalancerIP. 
 
-### NodePort
+# Completion Criteria
 
-Another way to expose your web application on the Internet is NodePort. Define
-variables in variables.bash and run the following script:
+This exercise can be considered complete once the application has been verified
+by [using a python client](#using-a-local-python-client) AND
+by using the [Port Forwarding](#port-forwarding) method for verifying
+[using a web browser](#using-a-web-application). In the below image,
+if the "Inferred Digit"
+correctly identifies the submitted image, as shown in the image below, the application is working as
+expected.
+![Web App](pictures/webapp.png?raw=true "Web app for MNIST")
 
- ```
-   ./webapp.bash
- ```
-
-After running this script, you will get the IP adress of your web application.
-Open browser and see app at http://IP_ADRESS:NodePort
 
 # Extras
 
@@ -211,29 +368,40 @@ If you want to change the training image, set `image` to your new training
 image. See the [prototype
 generation](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/train.bash#L21)
 
-        ks param set ${JOB} image ${IMAGE}
+```console
+    ks param set ${JOB} image ${IMAGE}
+```
 
 If you would like to retrain the model(with a new image or not), you can delete
 the current training job and create a new one. See the
 [training](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/train.bash#L28)
 step.
 
-         ks delete ${KF_ENV} -c ${JOB}
-         ks apply ${KF_ENV} -c ${JOB}
-## Clean up pods
-	
-	./cleanup.bash
+```console
+     ks delete ${KF_ENV} -c ${JOB}
+     ks apply ${KF_ENV} -c ${JOB}
+```
+## Cleaning up pods
 
-   Forcefully terminate pods using:
-   
-   	$ kubectl delete pod <pod_name> --force -n kubeflow --grace-period=0
-	
+```console
+    ./cleanup.bash
+```
+If GKE cluster was being used, this **DOES NOT DELETE** clusters on GKE.
+Clusters need to be deleted either via the shell (using `gcloud` commands) or
+via the GKE web portal. If the clusters keep running, they will be appropriately
+billed.
+
+Forcefully terminate pods using:
+
+```console
+    $ kubectl delete pod <pod_name> --force -n kubeflow --grace-period=0
+```
+
 ### Note
 
 If container needs to use an HTTP, HTTPS, or FTP proxy server (for internet connectivity), configure it by setting the environment variables when building docker image. Set the HTTP, HTTPS, or FTP proxy server environment variable in Dockerfile.
-    
+
 	ENV HTTPS_PROXY "https://127.0.0.1:3001"
 	ENV HTTP_PROXY "http://127.0.0.1:3001"
 	ENV FTP_PROXY "ftp://127.0.0.1:3001"
 	ENV NO_PROXY "*.test.example.com,.example2.com"
-    

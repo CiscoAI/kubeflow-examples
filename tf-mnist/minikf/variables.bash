@@ -5,6 +5,7 @@ NAMESPACE=kubeflow
 
 ## Ksonnet app name
 APP_NAME=mnist
+VAGRANT_KS_APP=/home/vagrant/kf/ks_app
 
 ## GITHUB version for official kubeflow components
 KUBEFLOW_GITHUB_VERSION=v0.4.1
@@ -13,7 +14,7 @@ KUBEFLOW_GITHUB_VERSION=v0.4.1
 CISCOAI_GITHUB_VERSION=master
 
 ## Ksonnet environment name
-KF_ENV=nativek8s
+KF_ENV=default
 
 ## Name of the NFS Persistent Volume
 NFS_PVC_NAME=nfs
@@ -36,6 +37,7 @@ IMAGE=${DOCKER_BASE_URL}/tf-mnist-demo:v1
 # Used in portf.bash and webapp.bash
 # If using without an application, source this file before using
 PORT=9000
+VAGRANT_IP=10.10.10.10
 export TF_MODEL_SERVER_PORT=${PORT}
 
 # Used in webapp.bash
@@ -43,5 +45,3 @@ DOCKER_HUB=gcr.io
 DOCKER_USERNAME=cpsg-ai-demo
 DOCKER_IMAGE=mnist-client-latest
 WEBAPP_FOLDER=webapp
-
-WEBAPP_PORT=9001
