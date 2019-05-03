@@ -75,5 +75,17 @@ done
 
 echo "TF MNIST client service created."
 
-#port forward mnist client port to a local port
-kubectl -n ${NAMESPACE} port-forward svc/tf-mnist-client ${WEBAPP_PORT}:80
+if [ $1 == "portforward" ]
+then
+#port-forward mnist client port to a local port
+    kubectl -n ${NAMESPACE} port-forward svc/tf-mnist-client ${WEBAPP_PORT}:80
+
+elif [ $1 == "nodeport" ]
+then
+#Prints Pod external IP  with Nodeport 
+    POD_NAME=$(kubectl get pods --namespace ${NAMESPACE}  --selector=app=mnist-client  --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+    NODE_NAME=`kubectl get pod/$POD_NAME -n kubeflow -o jsonpath='{.spec.nodeName}'`
+    NODE_IP=`kubectl get node/$NODE_NAME  -o jsonpath='{.status.addresses[1].address}'`
+    NODE_PORT=`kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.spec.ports[0].nodePort}'`
+    echo "Webapp is running at http://${NODE_IP}:${NODE_PORT}"
+fi
