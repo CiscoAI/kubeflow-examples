@@ -296,6 +296,12 @@ Another way to expose your web application on the Internet is NodePort.
 After running this script, you will get the IP address and portnumber of web application.
 Open browser and see app at http://IP_ADDRESS:NodePort
 
+#### Note
+
+Create a firewall rule to open Nodeport in GKE using the command given below
+```console
+     gcloud compute firewall-rules create <rule-name> --allow=tcp:<NODEPORT>
+```
 ### LoadBalancer
 
 This is ideal if you would like to create a test web application exposed by a loadbalancer.
