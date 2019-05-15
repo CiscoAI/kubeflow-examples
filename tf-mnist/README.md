@@ -185,6 +185,7 @@ If above commands succeeds, **you are good to go!**
     # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
     kubectl get pods -n kubeflow
 ```
+![kubectl get pods ](pictures/installbash-get-pods.png?raw=true "kubectl get pods -n kubeflow")
 
 If you see any rate limit error from github, please check that you have followed
 the instruction at:
@@ -219,17 +220,24 @@ the instruction at:
     kubectl get pods -n kubeflow
 ```
 Wait till the TF worker pod status changes to "Completed".
+![kubectl get pods train bash ](pictures/trainbash-get-pods.png?raw=true "kubectl get pods -n kubeflow train bash")
+
 Check training pod's logs using the command:
 ```
     kubectl logs tf-mnistjob-worker-0 -n kubeflow
 ```  
+![tf-mnistjob-worker-0-logs ](pictures/tf-mnistjob-worker-0-logs.png?raw=true "tf-mnistjob-worker-0-logs")
 
 3. Start TF serving on the trained results
 
 ```console
     ./serve.bash
 ```
-
+```
+    # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
+    kubectl get pods -n kubeflow
+```
+![kubectl get pods ](pictures/servebash-get-pods.png?raw=true "kubectl get pods -n kubeflow")
 # Model Testing
 
 The model can be tested using a local python client or via web application
