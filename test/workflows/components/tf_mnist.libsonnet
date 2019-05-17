@@ -81,7 +81,7 @@
       // The directory containing the ciscoai/kubeflow-workflows repo
       local srcDir = srcRootDir + "/" + repoOwner + "/" + repoName;
       local testWorkerImage = "gcr.io/kubeflow-ci/test-worker";
-      local nightlyImage = "gcr.io/cpsg-ai-test/nightly_worker:0.1";
+      local nightlyImage = "gcr.io/cpsg-ai-test/nightly_worker:0.2";
       local golangImage = "golang:1.9.4-stretch";
       local helmImage = "volumecontroller/golang:1.9.2";
       // The name of the NFS volume claim to use for test files.
